@@ -31,7 +31,9 @@
     </div>
 
     <div class="btnRightWrap">
-      <button type="button">등록</button>
+      <router-link to="/community/write">
+        <button type="button">등록</button>
+      </router-link>
     </div>
   </div>
 </template>

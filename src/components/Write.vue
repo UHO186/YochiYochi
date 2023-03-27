@@ -22,6 +22,8 @@
 
 <script>
 import Writeform from "./Writeform.vue";
+import { useStore } from "vuex";
+const store = useStore();
 
 export default {
   data() {
@@ -49,26 +51,11 @@ export default {
       }
       return true;
     },
-    /* async postBoard(cn) {
-            if (cn) {
-                await this.axios
-                    .post("http://localhost/api/community/store", this.value)
-                    .then((res) => {
-                        console.log(res.data)
-                        location.href = "/"
-                    })
-                    .catch((error) => {
-                        console.log(error)
-                    })
-                    .finally(() => {
-                        console.log()
-                    })
-            }
-        } */
+
     async store() {
       try {
-        const rs = await this.store
-          .dispatch("auth/createPost", {
+        const rs = await this.$store
+          .dispatch("community/createPost", {
             post_title: this.value.title,
             post_content: this.value.textdetail,
           })

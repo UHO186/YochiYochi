@@ -3,6 +3,7 @@ import createPersistedState from "vuex-persistedstate";
 
 import auth from "./auth/auth";
 import community from "./Community/community";
+import qna from "./Qna/qna";
 
 const store = createStore({
   state: {
@@ -21,6 +22,7 @@ const store = createStore({
   modules: {
     auth,
     community,
+    qna,
   },
   plugins: [
     createPersistedState({

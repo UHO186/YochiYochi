@@ -99,10 +99,7 @@ export default {
       }
     }
 
-    onMounted(() => {
-      // checkEmail();
-      // checkPassword();
-    });
+    onMounted(() => {});
 
     return {
       data,
@@ -183,13 +180,4 @@ export default {
 //       }
 //     },
 //   },
-//   watch: {
-//     "value.email": function () {
-//       this.checkEmail();
-//     },
-//     "value.password": function () {
-//       this.checkPassword();
-//     },
-//   },
-// };
 </script>

@@ -32,7 +32,7 @@ axiosinstance.interceptors.response.use(
       // console.log("error:", errorRes);
       if (errorRes.status === 401) {
         // access token이 만료되었거나 없는 경우
-        console.log("함 볼까", errorRes);
+
         if (errorRes.statusText === "Unauthorized") {
           const refreshToken = cookies.get("refreshToken");
 
@@ -53,17 +53,22 @@ axiosinstance.interceptors.response.use(
             } catch (err) {
               console.error(err);
               alert("로그인이 필요합니다.");
+              router.push("/login");
               return Promise.reject(err);
             }
           } else {
             // refresh token이 없는 경우
             alert("로그인이 필요합니다.");
+            router.push("/login");
             return Promise.reject(error);
           }
         } else {
           // access token이 변조 등 유효하지 않은 경우
           console.warn("유효하지 않은 토큰", error);
+          cookies.remove("accessToken");
+          cookies.remove("refreshToken");
           alert("다시 로그인해주시기 바랍니다.");
+          router.push("/login");
           return Promise.reject(error);
         }
       }

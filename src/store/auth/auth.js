@@ -1,5 +1,6 @@
 import axios from "../../plugins/axios";
 import { useCookies } from "vue3-cookies";
+import router from "../../router/index.js";
 
 export default {
   namespaced: true,
@@ -17,6 +18,17 @@ export default {
     },
   },
   actions: {
+    async signup({ commit }, params) {
+      try {
+        const rs = await axios.post("http://localhost/api/register", params);
+
+        return rs.data.msg;
+      } catch (err) {
+        console.error(err);
+        throw err;
+      }
+    },
+
     async login({ commit }, params) {
       try {
         const rs = await axios.post("http://localhost/api/login", params);
@@ -63,26 +75,7 @@ export default {
         throw err;
       }
     },
-    /* async refreshToken({ commit }) {
-      try {
-        const rs = await axios.post("http://localhost/api/refresh");
-        if (rs.data.ok) {
-          console.log(rs.data);
-          const access = rs.data.access_token;
-          const { cookies } = useCookies();
-          cookies.set("accessToken", access, import.meta.env.VITE_ACCESS_TIME);
-          commit("needLogin", false);
-          return true;
-        } else {
-          console.error(rs.data.msg);
-          commit("needLogin", true);
-          return false;
-        }
-      } catch (err) {
-        console.error(err);
-        throw err;
-      }
-    }, */
+
     async logout({ commit }) {
       try {
         const { cookies } = useCookies();

@@ -8,7 +8,7 @@
         <li><router-link to="/qna">QnA</router-link></li>
         <li><router-link to="/movenet">Movenet</router-link></li>
         <li v-if="!needLogin" @click="logout">logout</li>
-        <li v-else>Hi!</li>
+        <li v-else><router-link to="/login">login</router-link></li>
       </ul>
     </div>
   </header>

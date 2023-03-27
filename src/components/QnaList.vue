@@ -42,6 +42,8 @@
 </template>
 
 <script>
+import { useStore } from "vuex";
+const store = useStore();
 export default {
   data() {
     //변수생성
@@ -51,23 +53,16 @@ export default {
     };
   },
   mounted() {
-    this.getData();
+    this.list();
   },
   methods: {
-    async getData() {
-      await this.axios
-        .get("http://localhost/api/qna")
-        .then((res) => {
-          console.log(res.staus);
-          console.log(res.data);
-          this.qnalist = res.data;
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-        .finally(() => {
-          console.log("항상 마지막에 실행");
-        });
+    async list() {
+      try {
+        const qnalist = await this.$store.dispatch("qna/fetchQnas");
+        this.qnalist = qnalist;
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
 };
