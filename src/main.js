@@ -3,6 +3,7 @@ import "./style.css";
 /* import { Quasar } from "quasar";
 import "@quasar/extras/material-icons/material-icons.css";
 import "quasar/src/css/index.sass"; */
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import router from "./router";
 import store from "./store";

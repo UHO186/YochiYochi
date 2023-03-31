@@ -1,15 +1,22 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
-import AboutView from "../views/AboutView.vue";
-import Profile from "../views/Profile.vue";
-import Community from "../components/BoardList.vue";
-import Qna from "../components/QnaList.vue";
-import Movenet from "../components/MoveTest.vue";
-import PostShow from "../components/Post.vue";
-import Login from "../components/Login.vue";
-import Register from "../components/Register/Signup.vue";
-import RSP from "../components/RSP.vue";
-import PostWrite from "../components/Write.vue";
+import Qna from "../components/qna/Qna.vue";
+import Community from "../components/board/Board.vue";
+import Write from "../components/write/Write.vue";
+import BoardEditor from "../components/editor/Boardeditor.vue";
+import ListShow from "../components/detail/Listshow.vue";
+import Service from '../components/main/Banner.vue';
+import Aboutus from "../components/aboutus/Aboutus.vue";
+import Main from "../components/main/Main.vue";
+import Freeboard from "../components/freeboard/Freeboard.vue"
+import Logins from "../components/logins/Logins.vue";
+import Signup from "../components/signup/Signup.vue";
+import Profile from "../components/profile/Profile.vue"
+import Customer from "../components/customer/Customer.vue"
+import Draw from "../components/Draw.vue";
+import Cardmemory from "../components/Cardmemory.vue";
+import Picturesort from "../components/Picturesort.vue";
+import Rainscore from "../components/Rainscore.vue";
+// import Movenet from "../components/MoveTest.vue";
 
 import { useCookies } from "vue3-cookies";
 
@@ -18,18 +25,43 @@ const { cookies } = useCookies();
 const routes = [
   {
     path: "/",
-    name: "home",
-    component: HomeView,
+    name: "main",
+    component: Main,
   },
   {
-    path: "/about",
-    name: "about",
-    component: AboutView,
+    path: "/aboutus",
+    name: "aboutus",
+    component: Aboutus,
+  },
+  {
+    path: "/freeboard",
+    name: "freeboard",
+    component: Freeboard,
+  },
+  {
+    path: "/logins",
+    name: "login",
+    component: Logins,
+  },
+  {
+    path: "/signup",
+    name: "signup",
+    component: Signup,
   },
   {
     path: "/profile",
     name: "profile",
     component: Profile,
+  },
+  {
+    path: "/services",
+    name: "services",
+    component: Service,
+  },
+  {
+    path: "/customer",
+    name: "customer",
+    component: Customer,
   },
   {
     path: "/community",
@@ -42,45 +74,60 @@ const routes = [
     component: Qna,
   },
   {
-    path: "/movenet",
-    name: "movenet",
-    component: Movenet,
+    path: "/community/write",
+    name: "Cwrite",
+    component: Write,
   },
   {
+    path: "/qna/write",
+    name: "Qwrite",
+    component: Write,
+  },
+  // {
+  //   path: "/movenet",
+  //   name: "movenet",
+  //   component: Movenet,
+  // },
+  {
     path: "/community/:id",
-    name: "Postshow",
-    component: PostShow,
+    name: "comments",
+    component: ListShow,
   },
   {
     path: "/qna/:id",
-    name: "QnAshow",
-    component: PostShow,
+    name: "answers",
+    component: ListShow,
   },
   {
-    path: "/rsp",
-    name: "RSP",
-    component: RSP,
+    path: "/community/:id/editor",
+    name: "Boardditor",
+    component: BoardEditor,
   },
   {
-    path: "/login",
-    name: "login",
-    component: Login,
+    path: "/qna/:id/editor",
+    name: "QnaEditor",
+    component: BoardEditor,
   },
   {
-    path: "/signup",
-    name: "register",
-    component: Register,
+    path: "/draw",
+    name: "draw",
+    component: Draw,
   },
   {
-    path: "/community/write",
-    name: "postwrite",
-    component: PostWrite,
+    path: "/rainscore",
+    name: "rainscore",
+    component: Rainscore,
   },
-  /* {
-    path: "/cardgame",
-    name: "CardGame",
-    component: CardGame,
-  }, */
+  {
+    path: "/cardmemory",
+    name: "cardmemory",
+    component: Cardmemory,
+  },
+  {
+    path: "/picturesort",
+    name: "picturesort",
+    component: Picturesort,
+  },
 ];
 
 export default function (store) {
@@ -89,7 +136,7 @@ export default function (store) {
     routes,
   });
   router.beforeEach(async (to, from, next) => {
-    if (to.name === "login" || to.name === "register" || to.name === "home") {
+    if (to.name === "login" || to.name === "signup" || to.name === "main") {
       return next();
     }
     if (import.meta.env.VITE_IS_LOGIN === "Y") {

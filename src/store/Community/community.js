@@ -74,7 +74,7 @@ export default {
       }
     },
 
-    async postComment({ commit }, { itemId, commentData }) {
+    async postComment({ commit }, commentData) {
       // 댓글 작성
       try {
         const rs = await axios.post(

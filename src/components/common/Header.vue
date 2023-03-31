@@ -6,7 +6,11 @@
         <li><router-link to="/">홈</router-link></li>
         <li><router-link to="/community">자유게시판</router-link></li>
         <li><router-link to="/qna">QnA</router-link></li>
-        <li><router-link to="/movenet">Movenet</router-link></li>
+        <li><router-link to="/freeboard">최신글</router-link></li>
+        <li><router-link to="/draw">그림그리기</router-link></li>
+        <li><router-link to="/rainscore">산성비게임</router-link></li>
+        <li><router-link to="/cardmemory">카드기억게임</router-link></li>
+        <li><router-link to="/picturesort">그림분류게임</router-link></li>
         <li v-if="!needLogin" @click="logout">logout</li>
         <li v-else><router-link to="/login">login</router-link></li>
       </ul>
@@ -57,7 +61,7 @@ li {
   list-style: none;
 }
 
-li > a {
+li>a {
   color: black;
 }
 </style>

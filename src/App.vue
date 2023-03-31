@@ -14,7 +14,7 @@ export default {
 };
 </script>
 
-<style>
+<!-- <style>
 #app {
   font-family: Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -28,4 +28,4 @@ export default {
   display: grid;
   grid-template-rows: 120px calc(100vh - 220px) 100px;
 }
-</style>
+</style> -->
