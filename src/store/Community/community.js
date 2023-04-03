@@ -20,9 +20,15 @@ export default {
     async createPost({ commit }, postData) {
       // 게시판 글 create
       try {
+        console.log("파일확인", postData);
         const rs = await axios.post(
           "http://localhost/api/community/store",
-          postData
+          postData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
         );
         console.log(rs);
         // 게시글 생성이 성공하면 필요한 작업을 수행합니다.
@@ -74,7 +80,7 @@ export default {
       }
     },
 
-    async postComment({ commit }, commentData) {
+    async postComment({ commit }, { commentData }) {
       // 댓글 작성
       try {
         const rs = await axios.post(

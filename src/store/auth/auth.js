@@ -1,6 +1,5 @@
 import axios from "../../plugins/axios";
 import { useCookies } from "vue3-cookies";
-import router from "../../router/index.js";
 
 export default {
   namespaced: true,
@@ -32,7 +31,7 @@ export default {
     async login({ commit }, params) {
       try {
         const rs = await axios.post("http://localhost/api/login", params);
-
+        console.log(rs);
         if (rs.data) {
           const access = rs.data.access_token;
           const refresh = rs.data.refresh_token;

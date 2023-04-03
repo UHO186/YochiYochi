@@ -22,7 +22,7 @@
                 :valids="valid.telHasError" />
         </div>
         <div>
-            <button type="button" @click="signup(checkAll())">작성</button>
+            <button type="button" @click="signup()">작성</button>
         </div>
     </div>
 </template>

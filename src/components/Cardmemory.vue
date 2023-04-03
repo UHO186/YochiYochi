@@ -11,10 +11,10 @@
             </div>
             <div class="card-grid" v-if="gameStarted">
                 <div v-for="(card, index) in cards" :key="index">
-                    <div class="card" :class="{ flipped: card.visible }" @click="handleCardClick(index)"
+                    <div class="card memory-card" :class="{ flipped: card.visible }" @click="handleCardClick(index)"
                         :style="{ pointerEvents: clickable ? 'auto' : 'none' }">
                         <div class="card-face card-front" :style="{ visibility: card.visible ? 'visible' : 'hidden' }">
-                            {{ card.value }}
+                            <img :src="card.value" alt="카드 앞면" width="80" height="120">
                         </div>
                         <div class="card-face card-back" :data-number="card.value"></div>
                     </div>
@@ -34,26 +34,30 @@ export default {
             cards: [],
             flippedCards: [],
             cardValues: [
-                "A",
-                "A",
-                "B",
-                "B",
-                "C",
-                "C",
-                "D",
-                "D",
-                "E",
-                "E",
-                "F",
-                "F",
-                "G",
-                "G",
-                "H",
-                "H",
-                "I",
-                "I",
-                "J",
-                "J"
+                "https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/955571110/B.jpg?675000000",
+                "https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/955571110/B.jpg?675000000",
+                "https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/2791097605/B.jpg?44000000",
+                "https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/2791097605/B.jpg?44000000",
+                "https://item-shopping.c.yimg.jp/i/z/card-museum_rira-jp012-r",
+                "https://item-shopping.c.yimg.jp/i/z/card-museum_rira-jp012-r",
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxiDbwPqERDQncC9XS_uudpyp42h17PnqBwg1rE40-eME-Uhw5CFYH7GtCSJp4hBtTMBI&usqp=CAU",
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxiDbwPqERDQncC9XS_uudpyp42h17PnqBwg1rE40-eME-Uhw5CFYH7GtCSJp4hBtTMBI&usqp=CAU",
+                "http://image.auction.co.kr/itemimage/17/56/ed/1756edf101.jpg",
+                "http://image.auction.co.kr/itemimage/17/56/ed/1756edf101.jpg",
+                "https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/998832134/B.jpg?393000000",
+                "https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/998832134/B.jpg?393000000",
+                "http://image.auction.co.kr/itemimage/96/06/e9/9606e9bb1.jpg",
+                "http://image.auction.co.kr/itemimage/96/06/e9/9606e9bb1.jpg",
+                "https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/2587357186/A2.jpg?52000000",
+                "https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/2587357186/A2.jpg?52000000",
+                "http://image.auction.co.kr/itemimage/72/1a/87/721a87ea6.jpg",
+                "http://image.auction.co.kr/itemimage/72/1a/87/721a87ea6.jpg",
+                "https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/2728786963/A2.jpg?70000000",
+                "https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/2728786963/A2.jpg?70000000",
+                "http://image.auction.co.kr/itemimage/a7/4d/65/a74d65841.jpg",
+                "http://image.auction.co.kr/itemimage/a7/4d/65/a74d65841.jpg",
+                "https://images-na.ssl-images-amazon.com/images/I/51XeqfP-1hL.jpg",
+                "https://images-na.ssl-images-amazon.com/images/I/51XeqfP-1hL.jpg",
             ],
             clickable: true
         };
@@ -168,6 +172,13 @@ export default {
 </script>
 
 <style>
+.card-front {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
 .card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
@@ -180,10 +191,10 @@ export default {
     perspective: 1000px;
 }
 
-.card {
+.memory-card {
     position: relative;
-    width: 110px;
-    height: 150px;
+    width: 80px;
+    height: 120px;
     transform-style: preserve-3d;
     transition: transform 0.5s;
 }

@@ -66,9 +66,6 @@ export default {
                 console.log(err);
             }
         }
-
-        onMounted(() => { });
-
         return {
             data,
             needLogin,
@@ -77,73 +74,4 @@ export default {
         };
     },
 };
-
-// import Input from "./Input.vue";
-// import { useStore } from "vuex";
-// import { computed } from "vue";
-// const store = useStore();
-
-// export default {
-//   data() {
-//     return {
-//       value: {
-//         email: "",
-//         password: "",
-//       },
-//       valid: {
-//         emailHasError: false,
-//         passwordHasError: false,
-//       },
-//     };
-//   },
-//   components: {
-//     Input,
-//   },
-//   computed: {
-//     needLogin: computed(() => {
-//       console.log(this.$store.getters["auth/needLogin"]);
-//       return this.$store.getters["auth/needLogin"];
-//     }),
-//   },
-//   methods: {
-//     checkEmail() {
-//       const validateEmail =
-//         /^[A-Za-z0-9_\\.\\-]+@[A-Za-z0-9\\-]+\.[A-Za-z0-9\\-]+/;
-
-//       if (validateEmail.test(this.value.email)) {
-//         this.valid.emailHasError = true;
-//         return;
-//       }
-//       this.valid.emailHasError = false;
-//     },
-//     checkPassword() {
-//       const validatePassword =
-//         /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,16}$/;
-
-//       if (validatePassword.test(this.value.password)) {
-//         this.valid.passwordHasError = true;
-//         return;
-//       }
-//       this.valid.passwordHasError = false;
-//     },
-//     checkAll() {
-//       if (!this.valid.emailHasError || !this.valid.passwordHasError) {
-//         alert("다시 입력하시오.");
-//         return;
-//       }
-//       return true;
-//     },
-
-//     async login() {
-//       try {
-//         await this.$store.dispatch("auth/login", {
-//           email: this.value.email,
-//           password: this.value.password,
-//         });
-//         this.$router.push({ name: "home" });
-//       } catch (err) {
-//         console.log(err);
-//       }
-//     },
-//   },
 </script>

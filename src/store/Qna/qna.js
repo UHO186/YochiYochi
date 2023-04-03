@@ -20,7 +20,15 @@ export default {
     async createQna({ commit }, postData) {
       // qna 글 create
       try {
-        const rs = await axios.post("http://localhost/api/qna/store", postData);
+        const rs = await axios.post(
+          "http://localhost/api/qna/store",
+          postData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
         console.log(rs);
         // qna 생성이 성공하면 필요한 작업을 수행합니다.
         return rs.data.msg;

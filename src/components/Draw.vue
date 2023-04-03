@@ -239,27 +239,13 @@ export default {
             this.x = coordinates.x;
             this.y = coordinates.y;
         },
-        // getStrokes() {
-        //     window.localStorage.setItem(
-        //         "vue-drawing-canvas",
-        //         JSON.stringify(this.$refs.VueCanvasDrawing.getAllStrokes())
-        //     );
-        //     alert(
-        //         "Strokes saved, reload your browser to see the canvas with previously saved image"
-        //     );
-        // },
-        // removeSavedStrokes() {
-        //     window.localStorage.removeItem("vue-drawing-canvas");
-        //     alert("Strokes cleared from local storage");
-        // },
-        saveImage() {
-            const images = this.image;
-            console.log(images)
+        async saveImage() {
+            try {
+                const postlist = await this.$store.dispatch("game/storeImg", this.image);
+            } catch (err) {
+                console.error(err);
+            }
         },
-        async postImage() {
-            await this.axios
-                .post('')
-        }
     },
 };
 </script>
