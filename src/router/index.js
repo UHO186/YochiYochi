@@ -1,21 +1,20 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Qna from "../components/qna/Qna.vue";
-import Community from "../components/board/Board.vue";
-import Write from "../components/write/Write.vue";
-import BoardEditor from "../components/editor/Boardeditor.vue";
-import ListShow from "../components/detail/Listshow.vue";
-import Service from '../components/main/Banner.vue';
-import Aboutus from "../components/aboutus/Aboutus.vue";
-import Main from "../components/main/Main.vue";
-import Freeboard from "../components/freeboard/Freeboard.vue"
-import Logins from "../components/logins/Logins.vue";
-import Signup from "../components/signup/Signup.vue";
-import Profile from "../components/profile/Profile.vue"
-import Customer from "../components/customer/Customer.vue"
-import Draw from "../components/Draw.vue";
-import Cardmemory from "../components/Cardmemory.vue";
-import Picturesort from "../components/Picturesort.vue";
-import Rainscore from "../components/Rainscore.vue";
+import Qna from "../views/Qna.vue";
+import Community from "../views/Board.vue";
+import Write from "../views/Write.vue";
+import BoardEditor from "../views/Boardeditor.vue";
+import ListShow from "../views/Listshow.vue";
+import Aboutus from "../views/Aboutus.vue";
+import Main from "../views/Main.vue";
+import Freeboard from "../views/Freeboard.vue";
+import Logins from "../views/Logins.vue";
+import Signup from "../views/Signup.vue";
+import Profile from "../views/Profile.vue";
+
+import Draw from "../views/Draw.vue";
+import Cardmemory from "../views/Cardmemory.vue";
+import Picturesort from "../views/Picturesort.vue";
+import Rainscore from "../views/Rainscore.vue";
 // import Movenet from "../components/MoveTest.vue";
 
 import { useCookies } from "vue3-cookies";
@@ -53,16 +52,7 @@ const routes = [
     name: "profile",
     component: Profile,
   },
-  {
-    path: "/services",
-    name: "services",
-    component: Service,
-  },
-  {
-    path: "/customer",
-    name: "customer",
-    component: Customer,
-  },
+
   {
     path: "/community",
     name: "community",

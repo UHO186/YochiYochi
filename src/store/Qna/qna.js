@@ -77,14 +77,14 @@ export default {
       }
     },
 
-    async postAnswer({ commit }, { postId, answerData }) {
+    async postAnswer({ commit }, answerData) {
       // 댓글 작성
       try {
         const rs = await axios.post(
           `http://localhost/api/answers/store`,
           answerData
         );
-        console.log(rs);
+        console.log("답변성공", rs);
         // 댓글 작성이 성공하면 필요한 작업을 수행합니다.
         return rs.data.msg;
       } catch (err) {
