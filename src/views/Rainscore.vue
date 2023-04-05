@@ -8,6 +8,8 @@
 </template>
 
 <script>
+import { toHandlers } from 'vue';
+
 export default {
     data() {
         return {
@@ -99,6 +101,7 @@ export default {
         };
 
         loop();
+
     },
     methods: {
         startGame() {
@@ -126,6 +129,7 @@ export default {
                 const x = this.targetsX[i] + this.targetsWidth / 2;
                 if (y >= this.height) {
                     this.isGameOver = true;
+                    this.postGameOver()
                 }
                 if (this.typed === this.targets[i]) {
                     this.typed = '';
@@ -197,6 +201,16 @@ export default {
             ctx.font = "36px sans-serif";
             ctx.fillStyle = "black";
             ctx.fillText(`Final Score: ${this.score}`, this.width / 2, this.height / 2 + 50);
+        },
+        async postGameOver() {
+            try {
+                await this.$store.dispatch("game/storeScore", {
+                    game_id: 1,
+                    score: this.score
+                });
+            } catch (err) {
+                console.error(err);
+            }
         },
     }
 }

@@ -31,6 +31,7 @@ export default {
             gameStarted: false,
             timeRemaining: 60,
             totalScore: 0,
+            overGame: false,
             cards: [],
             flippedCards: [],
             cardValues: [
@@ -91,9 +92,13 @@ export default {
         startTimer() {
             let startTime = Date.now();
 
+            setTimeout(() => {
+                this.postGameOver();
+            }, 60000);
+
             this.timer = setInterval(() => {
                 const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
-                this.timeRemaining = Math.max(0, 60 - elapsedTime);
+                this.timeRemaining = Math.max(0, 60 - elapsedTime); // 게임 시간 설정
                 if (this.timeRemaining === 0) {
                     clearInterval(this.timer);
                     this.gameOver();
@@ -166,6 +171,16 @@ export default {
         gameOver() {
             // alert(`게임 종료! 총 점수: ${this.totalScore}`);
             this.gameStarted = false;
+        },
+        async postGameOver() {
+            try {
+                await this.$store.dispatch("game/storeScore", {
+                    game_id: 1,
+                    score: this.totalScore
+                });
+            } catch (err) {
+                console.error(err);
+            }
         }
     }
 }

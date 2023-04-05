@@ -1,58 +1,39 @@
 <template>
-  <div>
-    <h3>글 상세보기</h3>
-    <div v-if="post && whatPage === 'community'">
-      <h1>{{ post.post_title }}</h1>
-      {{ post.post_content }}
-    </div>
-    <div v-if="post && whatPage === 'qna'">
-      <h1>{{ post.qna_title }}</h1>
-      {{ post.qna_content }}
-    </div>
-  </div>
-  <div v-show="whatPage === 'community'">
-    <button @click="goEditor()">수정</button>
-    <button @click="delData()">삭제</button>
-  </div>
-  <div v-show="whatPage === 'qna'">
-    <button @click="goEditor()">수정</button>
-    <button @click="delQna()">삭제</button>
-  </div>
-  <div>
-    <h3>{{ whatPage === "community" ? "댓글" : "답변" }}</h3>
-    <Writeform v-show="whatPage === 'community'" v-model="comment" /><button
-      v-if="whatPage === 'community'"
-      @click="postComment()"
-    >
-      작성
-    </button>
-    <Writeform v-show="whatPage === 'qna'" v-model="comment" /><button
-      v-if="whatPage === 'qna'"
-      @click="postAnswer()"
-    >
-      작성
-    </button>
-
-    <h6>{{ whatPage === "community" ? "댓글" : "답변" }}</h6>
-    <div v-if="whatPage === 'community'">
-      <div v-for="c in comments" v-bind:key="c">
-        <span>{{ "작성자 : " + c.users.name }}</span
-        ><input
-          v-if="whatPage === 'community'"
-          :placeholder="c.comment"
-          disabled
-        /><button @click="delComment(c)">삭제</button>
-      </div>
+    <div>
+        <h3>글 상세보기</h3>
+        <div v-if="post">
+            <h1 v-if="whatPage === 'community'">{{ post.post_title }}</h1>
+            <h1 v-if="whatPage === 'qna'">{{ post.qna_title }}</h1>
+            <p v-if="whatPage === 'community'">{{ post.post_content }}</p>
+            <p v-if="whatPage === 'qna'">{{ post.qna_content }}</p>
+        </div>
     </div>
 
-    <div v-if="whatPage === 'qna'">
-      <div v-for="a in answer" v-bind:key="a">
-        <span>{{ "작성자 : " + a }}</span>
-        <input v-if="whatPage === 'qna'" :placeholder="a" disabled />
-        <button @click="delComment(a)">삭제</button>
-      </div>
+    <div v-show="whatPage === 'community' || whatPage === 'qna'">
+        <button @click="goEditor()">수정</button>
+        <button v-if="whatPage === 'community'" @click="delData()">삭제</button>
+        <button v-if="whatPage === 'qna'" @click="delQna()">삭제</button>
     </div>
-  </div>
+
+    <div>
+        <h3>{{ whatPage === "community" ? "댓글" : "답변" }}</h3>
+        <Writeform v-model="comment" v-show="whatPage === 'community' || whatPage === 'qna'" />
+        <button @click="whatPage === 'community' ? postComment() : postAnswer()">작성</button>
+        <div v-if="whatPage === 'community'">
+            <div v-for="c in comments" v-bind:key="c">
+                <span>{{ "작성자 : " + c.users.name }}</span>
+                <input :placeholder="c.comment" disabled />
+                <button @click="delComment(c)">삭제</button>
+            </div>
+        </div>
+        <div v-if="whatPage === 'qna'">
+            <div v-for="a in answer" v-bind:key="a">
+                <span>{{ "작성자 : " + a.qna_id }}</span>
+                <input :placeholder="a.comment" disabled />
+                <button @click="delAnswer(a, adminName)">삭제</button>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -60,133 +41,78 @@ import Writeform from "../components/write/Writeform.vue";
 import Listshowdetail from "../components/detail/Listshowdetail.vue";
 
 export default {
-  data() {
-    return {
-      post: "",
-      comment: "",
-      comments: "",
+    data() {
+        return {
+            post: "",
+            comment: "",
+            comments: "",
+            answer: "",
 
-      whatPage: this.$route.path.substring(
-        this.$route.path.indexOf("/") + 1,
-        this.$route.path.indexOf("/", this.$route.path.indexOf("/") + 1)
-      ),
-    };
-  },
-  components: {
-    Listshowdetail,
-    Writeform,
-  },
-  mounted() {
-    if (this.whatPage === "community") {
-      this.getData();
-    } else {
-      this.getQna();
-    }
-  },
-  methods: {
-    goEditor() {
-      location.href =
-        "http://localhost:4000/" +
-        this.whatPage +
-        "/" +
-        this.$route.params.id +
-        "/editor";
+            whatPage: this.$route.path.substring(
+                this.$route.path.indexOf("/") + 1,
+                this.$route.path.indexOf("/", this.$route.path.indexOf("/") + 1)
+            ),
+        };
     },
-    async getData() {
-      try {
-        const postlist = await this.$store.dispatch(
-          "community/getPost",
-          this.$route.params.id
-        );
-        this.post = postlist[0];
-        this.comments = postlist[1];
-      } catch (err) {
-        console.log(err);
-      }
+    components: {
+        Listshowdetail,
+        Writeform,
     },
-    async getQna() {
-      try {
-        const postlist = await this.$store.dispatch(
-          "qna/getQna",
-          this.$route.params.id
-        );
+    mounted() {
+        if (this.whatPage === "community") {
+            this.getData();
+        } else {
+            this.getQna();
+        }
+    },
+    methods: {
+        goEditor() {
+            this.$router.push(`/${this.whatPage}/${this.$route.params.id}/editor`);
+        },
 
-        this.post = postlist[0];
-        this.answer = postlist[1];
-        console.log(this.answer);
-      } catch (err) {
-        console.log(err);
-      }
+        async getData() {
+            const [post, comments] = await this.$store.dispatch(`${this.whatPage}/getPost`, this.$route.params.id).catch(console.log);
+            this.post = post;
+            this.comments = comments;
+        },
+
+        async getQna() {
+            const [post, answer] = await this.$store.dispatch('qna/getQna', this.$route.params.id).catch(console.log);
+            this.post = post;
+            this.answer = answer;
+            console.log(this.answer);
+        },
+
+        async deletePost() {
+            if (confirm("정말 삭제하시겠습니까?")) {
+                await this.$store.dispatch(`${this.whatPage}/deletePost`, this.$route.params.id).catch(console.log);
+                this.$router.push(`/${this.whatPage}`);
+            }
+        },
+
+        async postComment() {
+            await this.$store.dispatch('community/postComment', { post_id: this.$route.params.id, comment: this.comment }).catch(console.log);
+            this.$router.go(0);
+        },
+
+        async postAnswer() {
+            await this.$store.dispatch('qna/postAnswer', { qna_id: this.$route.params.id, comment: this.comment }).catch(console.log);
+            this.$router.go(0);
+        },
+
+        async delComment(comment) {
+            if (confirm("정말 삭제하시겠습니까?")) {
+                await this.$store.dispatch('community/deleteComment', comment.id).catch(console.log);
+                this.$router.go(0);
+            }
+        },
+
+        async delAnswer(answer) {
+            if (confirm("정말 삭제하시겠습니까?")) {
+                await this.$store.dispatch('qna/deleteAnswer', answer.id).catch(console.log);
+                this.$router.go(0);
+            }
+        },
     },
-    async delData() {
-      const ch = confirm("정말 삭제하시겠습니까?");
-      if (ch) {
-        try {
-          const postlist = await this.$store.dispatch(
-            "community/deletePost",
-            this.$route.params.id
-          );
-        } catch (err) {
-          console.log(err);
-        }
-      }
-    },
-    async delQna() {
-      const ch = confirm("정말 삭제하시겠습니까?");
-      if (ch) {
-        try {
-          await this.$store.dispatch("qna/deleteQna", this.$route.params.id);
-        } catch (err) {
-          console.log(err);
-        }
-      }
-    },
-    async postComment() {
-      try {
-        await this.$store.dispatch("community/postComment", {
-          post_id: this.$route.params.id,
-          comment: this.comment,
-        });
-        this.$router.push("/community/" + this.$route.params.id);
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    async postAnswer() {
-      try {
-        await this.$store.dispatch("qna/postAnswer", {
-          qna_id: this.$route.params.id,
-          comment: this.comment,
-        });
-        this.$router.push("/qna/" + this.$route.params.id);
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    async delComment(c) {
-      const ch = confirm("정말 삭제하시겠습니까?");
-      console.log(this.comments);
-      if (ch) {
-        try {
-          await this.$store.dispatch("community/deleteComment", c.id);
-          this.$router.push("/community/" + this.$route.params.id);
-        } catch (err) {
-          console.log(err);
-        }
-      }
-    },
-    async delAnswer(c) {
-      const ch = confirm("정말 삭제하시겠습니까?");
-      console.log(this.comments);
-      if (ch) {
-        try {
-          await this.$store.dispatch("qna/deleteAnswer", a.id);
-          this.$router.push("/qna/" + this.$route.params.id);
-        } catch (err) {
-          console.log(err);
-        }
-      }
-    },
-  },
 };
 </script>
