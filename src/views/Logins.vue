@@ -33,6 +33,7 @@
 import Input from "../components/signup/Input.vue";
 import { useStore } from "vuex";
 import { computed, onMounted } from "vue";
+import {useRouter} from "vue-router";
 
 export default {
   components: {
@@ -40,7 +41,7 @@ export default {
   },
   setup() {
     const store = useStore();
-
+    const router = useRouter();
     const data = {
       value: {
         email: "",
@@ -71,7 +72,7 @@ export default {
           email: this.data.value.email,
           password: this.data.value.password,
         });
-        this.$router.push({ name: "home" });
+        router.push("/");
       } catch (err) {
         console.log(err);
       }

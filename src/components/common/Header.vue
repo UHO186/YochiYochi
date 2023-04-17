@@ -21,11 +21,12 @@
 <script>
 import { useStore } from "vuex";
 import { computed, onMounted } from "vue";
+import {useRouter} from "vue-router";
 
 export default {
   setup() {
     const store = useStore();
-
+    const router = useRouter();
     // computed 속성으로 needLogin 값을 가져옴
     const needLogin = computed(() => {
       return store.getters["auth/needLogin"];
@@ -33,7 +34,9 @@ export default {
 
     // logout 액션 실행 함수
     const logout = () => {
+
       store.dispatch("auth/logout");
+      router.push("/")
     };
 
     return {

@@ -1,0 +1,82 @@
+<template>
+    <div id="wrap">
+        <div id="content">
+            <div id="note">
+                <!-- 포커스 하기 -->
+                <p class="text-xl font-extrabold pl-3 border-b-2">공지사항</p>
+                <div v-for="(item, index) in notice_list" :key="index">
+                    <NoticeListItem :title="item.post_title" :created_at="item.created_at.slice(0, 10)"
+                        :notice_index="index">
+                    </NoticeListItem>
+                </div>
+                <ul class="pt-3">
+                    <li class="flex justify-center">
+                        <p class="px-2 mx-1 border-2 ">{{ "<" }}</p>
+                                <p class="px-2 mx-1 border-2">{{ notice_page }}</p>
+                                <p class="px-2 mx-1 border-2">{{ ">" }}</p>
+                    </li>
+                </ul>
+            </div>
+            <div id="faq" style="padding-top: 30px;">
+                <p class="text-xl font-extrabold pl-3">자주 묻는 질문</p>
+                <ul>
+                    <FaqListItem :question="faq_question" :comments="faq_comments"></FaqListItem>
+                </ul>
+            </div>
+            <div id="qna" style="padding-top: 30px;">
+                <p class="text-xl font-extrabold pl-3">Qna</p>
+                <ul>
+                    <QnaListItem :list="10" :title="qna_title" :writer="qna_writer" :created_at="qna_created_at"
+                        :question="qna_question"></QnaListItem>
+                </ul>
+                <div class="flex justify-end mt-4">
+                    <div class="border rounded-lg p-1 bg-red-300 cursor-pointer mr-5">질문하기</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+import FaqListItem from '../components/customer/faq-list-item.vue';
+import NoticeListItem from '../components/customer/notice-list-item.vue';
+import QnaListItem from '../components/customer/qna-list-item.vue';
+
+export default {
+    data() {
+        return {
+            notice_list: '',
+            faq_list: '',
+            qna_list: '',
+            notice_page: 1,
+        }
+    },
+    mounted() {
+
+    },
+    methods: {
+
+    },
+    components: {
+        NoticeListItem,
+        FaqListItem,
+        QnaListItem,
+    },
+}
+</script>
+
+<style>
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+#content {
+    border-radius: 10px;
+    padding: 50px;
+    margin-top: 50px;
+    width: 75%;
+    background-color: rgb(255, 255, 255);
+    min-height: 720px;
+}
+</style>

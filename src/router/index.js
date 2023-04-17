@@ -9,13 +9,16 @@ import Main from "../views/Main.vue";
 import Freeboard from "../views/Freeboard.vue";
 import Logins from "../views/Logins.vue";
 import Signup from "../views/Signup.vue";
-import Profile from "../views/Profile.vue";
-
 import Draw from "../views/Draw.vue";
 import Cardmemory from "../views/Cardmemory.vue";
 import Picturesort from "../views/Picturesort.vue";
 import Rainscore from "../views/Rainscore.vue";
-// import Movenet from "../components/MoveTest.vue";
+import Profile from "../views/Profile.vue";
+import Service from "../views/Service.vue";
+import Customer from "../views/Customer.vue";
+import NoticeDetail from "../views/NoticeDetail.vue";
+import QnaDetail from "../views/QnaDetail.vue";
+import ContentList from "../views/ContentList.vue";
 
 import { useCookies } from "vue3-cookies";
 
@@ -48,12 +51,6 @@ const routes = [
     component: Signup,
   },
   {
-    path: "/profile",
-    name: "profile",
-    component: Profile,
-  },
-
-  {
     path: "/community",
     name: "community",
     component: Community,
@@ -73,11 +70,6 @@ const routes = [
     name: "Qwrite",
     component: Write,
   },
-  // {
-  //   path: "/movenet",
-  //   name: "movenet",
-  //   component: Movenet,
-  // },
   {
     path: "/community/:id",
     name: "comments",
@@ -117,6 +109,36 @@ const routes = [
     path: "/picturesort",
     name: "picturesort",
     component: Picturesort,
+  },
+  {
+    path: "/profile",
+    name: "profile",
+    component: Profile,
+  },
+  {
+    path: "/service",
+    name: "service",
+    component: Service,
+  },
+  {
+    path: "/customer",
+    name: "customer",
+    component: Customer,
+  },
+  {
+    path: "/customer/noticeDetail",
+    name: "noticeDetail",
+    component: NoticeDetail,
+  },
+  {
+    path: "/customer/qnaDetail",
+    name: "QnaDetail",
+    component: QnaDetail,
+  },
+  {
+    path: "/content",
+    name: "ContentList",
+    component: ContentList,
   },
 ];
 
