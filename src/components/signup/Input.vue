@@ -1,15 +1,17 @@
 <template>
-    <div class="input-box">
-        <!-- <h3 class="input-title" :class="{ 'title-danger': valids }"> -->
+    <form class="input-box form-floating">
         <h3 class="input-title" :class="valids ? false : 'title-danger'">
             {{ names }}
         </h3>
-        <input :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" class="input-item"
-            :type="passwords ? 'password' : 'text'" :placeholder="placeholders" :class="{ 'input-danger': valids }" />
-        <p v-show="valids ? false : true" class="input-error">
+        <div class="input-group mb-3">
+            <span class="input-group-text">{{ names }}</span>
+            <input :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" class="form-control"
+                :type="passwords ? 'password' : 'text'" :placeholder="placeholders" :class="{ 'is-invalid': !valids }" />
+        </div>
+        <p v-show="valids ? false : true" class="title-danger">
             {{ names }}을 정확히 입력해주세요.
         </p>
-    </div>
+    </form>
 </template>
 
 <script>

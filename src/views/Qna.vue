@@ -5,7 +5,7 @@
     <Qnapage :list-array="qnalist" what-page="/qna/" :pageNum="0" />
 
     <div>
-      <button @click="goWrite()">등록</button>
+      <button class="btn btn-primary" @click="goWrite()">등록</button>
     </div>
   </div>
 </template>

@@ -30,6 +30,7 @@ export default {
         async getCData() {
             try {
                 const getCList = await this.$store.dispatch("community/fetchPosts");
+                this.getCList = getCList
                 console.log(getCList);
             } catch (err) {
                 console.error(err);
@@ -38,6 +39,7 @@ export default {
         async getQData() {
             try {
                 const getQList = await this.$store.dispatch("qna/fetchQnas");
+                this.getQList = getQList
                 console.log(getQList);
             } catch (err) {
                 console.error(err);

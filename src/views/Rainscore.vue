@@ -1,7 +1,12 @@
 <template>
     <div>
-        <canvas ref="canvas"></canvas>
-        <button v-if="!isStarted" @click="startGame">게임 시작</button>
+        <canvas class="rounded-4 border border-success p-2 mb-2 border-opacity-75" ref="canvas"></canvas>
+        <div v-if="isFinished" class="game-finished">
+            <h2>축하합니다!</h2>
+            <p>모든 단어를 맞췄습니다.</p>
+            <button v-if="isFinished" @click="completePage">다시하기</button>
+        </div>
+        <button v-if="!isStarted && !isFinished" @click="startGame">게임 시작</button>
         <button v-if="isGameOver" @click="restartGame">다시하기</button>
         <h3>{{ this.typed }}</h3>
     </div>
@@ -9,15 +14,17 @@
 
 <script>
 import { toHandlers } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default {
     data() {
         return {
-            targets: ['みかん', 'スイカ', 'イチゴ', 'ブドウ', 'メロン'],
+            targets: ['スイカ'],
             typed: '',
             score: 0,
             speed: 0.2,
             targetsPerSecond: 1,
+            level: 1,
             width: 0,
             height: 0,
             targetsX: [],
@@ -31,14 +38,20 @@ export default {
             recognitionSupported: false,
             targetsPerSecond: 0.3, // 1초에 targets가 떨어지는 개수
             targetsInterval: null,
+            isFinished: false,
+            word: []
         };
     },
     mounted() {
+        this.getWord()
+
         const canvas = this.$refs.canvas;
         const ctx = canvas.getContext('2d');
 
         this.width = canvas.width = 800;
         this.height = canvas.height = 600;
+
+        this.isFinished = false
 
         this.recognitionSupported = 'webkitSpeechRecognition' in window;
 
@@ -50,6 +63,8 @@ export default {
             this.targetsY = -100;
         }, 10000 / this.targetsPerSecond);
 
+        const router = useRouter();
+        this.router = router
 
         setInterval(() => {
             this.moveTargets();
@@ -84,40 +99,77 @@ export default {
         }
 
         const loop = () => {
-            ctx.clearRect(0, 0, this.width, this.height);
-
-            if (!this.isGameOver && this.isStarted) {
-                this.moveTargets();
-                this.drawTargets(ctx);
-                this.checkCollisions();
-                this.drawScore(ctx);
-            } else {
-                if (this.isGameOver) {
-                    this.drawGameOver(ctx);
-                }
+            if (this.isGameOver) {
+                this.drawGameOver(ctx);
+                return this.postGameOver();
+            }
+            if (this.isGameOver) {
+                this.drawGameOver(ctx);
+                return this.postGameOver();
             }
 
-            requestAnimationFrame(loop);
+            ctx.clearRect(0, 0, this.width, this.height);
+            this.moveTargets();
+            this.drawTargets(ctx);
+            this.checkCollisions();
+            this.drawScore(ctx);
+
+            if (this.isStarted) {
+                requestAnimationFrame(loop);
+            }
         };
-
-        loop();
-
+        this.loop = loop;
+        requestAnimationFrame(this.loop);
     },
     methods: {
+        shuffle(array) {
+            let currentIndex = array.length;
+            let temporaryValue, randomIndex;
+
+            // While there remain elements to shuffle...
+            while (0 !== currentIndex) {
+
+                // Pick a remaining element...
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex -= 1;
+
+                // And swap it with the current element.
+                temporaryValue = array[currentIndex];
+                array[currentIndex] = array[randomIndex];
+                array[randomIndex] = temporaryValue;
+            }
+
+            return array;
+        },
         startGame() {
+            if (this.level === 1) {
+                const numTargetsToAdd = 4;
+                for (let i = 0; i < numTargetsToAdd; i++) {
+                    let randomIndex;
+                    do {
+                        randomIndex = Math.floor(Math.random() * this.word.length);
+                    } while (this.targets.includes(this.word[randomIndex].word))
+                    this.targets.push(this.word[randomIndex].word);
+                }
+                this.shuffle(this.targets);
+                console.log(this.targets);
+            }
             this.isStarted = true;
             this.targetsY = -100;
             this.isGameOver = false;
             this.score = 0;
             this.typed = '';
-            if (this.recognitionSupported) {
+            this.isFinished = false; // 추가
+            if (this.recognitionSupported && !this.recognition.running) {
                 this.recognition.start();
             }
             // targetsX 배열을 초기화합니다.
             this.targetsX = Array.from({ length: this.targets.length }, () => Math.random() * (this.width - this.targetsWidth));
+
+            requestAnimationFrame(this.loop);
         },
         restartGame() {
-            location.href = "/rainscore"
+            this.$router.go(0)
         },
         getRandomTarget() {
             return this.targets[Math.floor(Math.random() * this.targets.length)];
@@ -129,16 +181,15 @@ export default {
                 const x = this.targetsX[i] + this.targetsWidth / 2;
                 if (y >= this.height) {
                     this.isGameOver = true;
-                    this.postGameOver()
+                    // this.postGameOver()
                 }
                 if (this.typed === this.targets[i]) {
                     this.typed = '';
                     this.score++;
                     this.targets.splice(i, 1);
                     this.targetsX.splice(i, 1);
+                    // this.targets.unshift(''); // 배열의 첫 번째 요소를 빈 문자열로 채웁니다.
                     i--;
-                    // this.targets.splice(i + 1, 0, this.getRandomTarget());
-                    // this.targetsX.splice(i + 1, 0, Math.random() * (this.width - this.targetsWidth));
                 }
             }
         },
@@ -167,25 +218,24 @@ export default {
                 const targetIndex = this.targets.indexOf(target);
                 this.targets.splice(targetIndex, 1);
 
-                // 그 자리를 비워둡니다.
+                // 그 자리를 비웁니다.
                 this.targets.splice(targetIndex, 0, '');
                 this.targetsX.splice(targetIndex, 0, 0);
+            }
 
-                // 나머지 원소를 한 칸씩 위로 이동시킵니다.
-                // for (let i = targetIndex; i < this.targets.length; i++) {
-                //     this.targets[i - 1] = this.targets[i];
-                //     this.targetsX[i - 1] = this.targetsX[i];
-                // }
-
-                // // 맨 마지막 원소는 랜덤한 새로운 값으로 채워줍니다.
-                // const lastIndex = this.targets.length - 1;
-                // this.targets[lastIndex] = this.getRandomTarget();
-                // this.targetsX[lastIndex] = Math.random() * (this.width - this.targetsWidth);
-
-                return; // 이 부분을 추가하여 더 이상 함수를 진행하지 않도록 합니다.
+            if (this.targets.length === 0) {
+                this.completePage()
+                return;
             }
         },
 
+        startFont(ctx) {
+            ctx.font = "60px sans-serif";
+            ctx.fillStyle = "red";
+            ctx.textAlign = "center";
+            ctx.fillText("Game Start", this.width / 2, this.height / 2);
+            ctx.font = "36px sans-serif";
+        },
 
         drawScore(ctx) {
             ctx.font = this.font;
@@ -202,10 +252,27 @@ export default {
             ctx.fillStyle = "black";
             ctx.fillText(`Final Score: ${this.score}`, this.width / 2, this.height / 2 + 50);
         },
+        completePage() {
+            ctx.font = "60px sans-serif";
+            ctx.fillStyle = "green";
+            ctx.textAlign = "center";
+            ctx.fillText("Game Complete", this.width / 2, this.height / 2);
+            ctx.font = "36px sans-serif";
+            ctx.fillStyle = "black";
+            ctx.fillText(`Final Score: ${this.score}`, this.width / 2, this.height / 2 + 50);
+        },
+        async getWord() {
+            try {
+                const cuslist = await this.$store.dispatch("game/indexWord", 2);
+                this.word = cuslist
+            } catch (err) {
+                console.error(err);
+            }
+        },
         async postGameOver() {
             try {
                 await this.$store.dispatch("game/storeScore", {
-                    game_id: 1,
+                    game_id: 2,
                     score: this.score
                 });
             } catch (err) {

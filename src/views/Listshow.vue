@@ -1,36 +1,44 @@
 <template>
     <div>
-        <h3>글 상세보기</h3>
+        <h3 class="display-3">글 상세보기</h3>
         <div v-if="post">
-            <h1 v-if="whatPage === 'community'">{{ post.post_title }}</h1>
-            <h1 v-if="whatPage === 'qna'">{{ post.qna_title }}</h1>
-            <p v-if="whatPage === 'community'">{{ post.post_content }}</p>
-            <p v-if="whatPage === 'qna'">{{ post.qna_content }}</p>
+            <input class="form-control mb-2 w-50" type="text" :value="post.post_title" v-if="whatPage === 'community'"
+                aria-label="Disabled input example" disabled readonly />
+            <input class="form-control mb-2 w-50" type="text" :value="post.qna_title" v-if="whatPage === 'qna'"
+                aria-label="Disabled input example" disabled readonly />
+            <textarea class="form-control mb-2" type="text" :value="post.post_content" v-if="whatPage === 'community'"
+                aria-label="Disabled input example" disabled readonly />
+            <textarea class="form-control mb-2" type="text" :value="post.qna_content" v-if="whatPage === 'qna'"
+                aria-label="Disabled input example" disabled readonly />
         </div>
     </div>
 
     <div v-show="whatPage === 'community' || whatPage === 'qna'">
-        <button @click="goEditor()">수정</button>
-        <button v-if="whatPage === 'community'" @click="delData()">삭제</button>
-        <button v-if="whatPage === 'qna'" @click="delQna()">삭제</button>
+        <button class="btn btn-outline-secondary mb-3" @click="goEditor()">수정</button>
+        <button class="btn btn-outline-secondary mb-3" v-if="whatPage === 'community'" @click="deletePost()">삭제</button>
+        <button class="btn btn-outline-secondary mb-3" v-if="whatPage === 'qna'" @click="deleteQna()">삭제</button>
     </div>
 
-    <div>
+    <div class="list-container">
+        <div class="row justify-content-center">
+            <Writeform class="w-50" v-model="comment" v-show="whatPage === 'community' || whatPage === 'qna'"
+                :names="whatPage === 'community' ? '댓글' : '답변'" />
+        </div>
+        <button class="btn btn-outline-secondary mb-3"
+            @click="whatPage === 'community' ? postComment() : postAnswer()">작성</button>
         <h3>{{ whatPage === "community" ? "댓글" : "답변" }}</h3>
-        <Writeform v-model="comment" v-show="whatPage === 'community' || whatPage === 'qna'" />
-        <button @click="whatPage === 'community' ? postComment() : postAnswer()">작성</button>
-        <div v-if="whatPage === 'community'">
-            <div v-for="c in comments" v-bind:key="c">
-                <span>{{ "작성자 : " + c.users.name }}</span>
-                <input :placeholder="c.comment" disabled />
-                <button @click="delComment(c)">삭제</button>
+        <div v-if="whatPage === 'community'" class="d-flex flex-column align-items-center">
+            <div class="input-group mb-3 w-50" v-for="c in comments" v-bind:key="c">
+                <span class="input-group-text">{{ "작성자 : " + c.users.name }}</span>
+                <input class="form-control" :placeholder="c.comment" disabled />
+                <button class="btn btn-outline-secondary" @click="delComment(c)">삭제</button>
             </div>
         </div>
-        <div v-if="whatPage === 'qna'">
-            <div v-for="a in answer" v-bind:key="a">
-                <span>{{ "작성자 : " + a.qna_id }}</span>
-                <input :placeholder="a.comment" disabled />
-                <button @click="delAnswer(a, adminName)">삭제</button>
+        <div v-if="whatPage === 'qna'" class="d-flex flex-column align-items-center">
+            <div class="input-group mb-3 w-50" v-for="a in answer" v-bind:key="a">
+                <span class="input-group-text">답변</span>
+                <input class="form-control" :placeholder="a.comment" disabled />
+                <button class="btn btn-outline-secondary" @click="delAnswer(a, adminName)">삭제</button>
             </div>
         </div>
     </div>
@@ -89,15 +97,29 @@ export default {
                 this.$router.push(`/${this.whatPage}`);
             }
         },
+        async deleteQna() {
+            if (confirm("정말 삭제하시겠습니까?")) {
+                await this.$store.dispatch(`${this.whatPage}/deleteQna`, this.$route.params.id).catch(console.log);
+                this.$router.push(`/${this.whatPage}`);
+            }
+        },
 
         async postComment() {
-            await this.$store.dispatch('community/postComment', { post_id: this.$route.params.id, comment: this.comment }).catch(console.log);
-            this.$router.go(0);
+            if (this.comment) {
+                await this.$store.dispatch('community/postComment', { post_id: this.$route.params.id, comment: this.comment }).catch(console.log);
+                this.$router.go(0);
+            } else {
+                alert('빈칸을 채워주세요')
+            }
         },
 
         async postAnswer() {
-            await this.$store.dispatch('qna/postAnswer', { qna_id: this.$route.params.id, comment: this.comment }).catch(console.log);
-            this.$router.go(0);
+            if (this.comment) {
+                await this.$store.dispatch('qna/postAnswer', { qna_id: this.$route.params.id, comment: this.comment }).catch(console.log);
+                this.$router.go(0);
+            } else {
+                alert('빈칸을 채워주세요')
+            }
         },
 
         async delComment(comment) {
@@ -116,3 +138,12 @@ export default {
     },
 };
 </script>
+
+<style>
+textarea {
+    width: 100%;
+    height: 20em;
+    border: none;
+    resize: none;
+}
+</style>

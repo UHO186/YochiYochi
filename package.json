@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@splidejs/vue-splide": "^0.6.12",
     "@tensorflow-models/pose-detection": "^2.0.0",
     "@tensorflow/tfjs-backend-wasm": "^4.2.0",
     "@tensorflow/tfjs-backend-webgl": "^4.2.0",
@@ -18,9 +19,11 @@
     "html-webpack-plugin": "^5.5.0",
     "npm-check-updates": "^16.7.13",
     "scatter-gl": "^0.0.13",
-    "vue": "^3.2.45",
+    "v": "^0.3.0",
+    "vue": "^3.2.47",
     "vue-drawing-canvas": "^1.0.14",
     "vue-router": "^4.1.6",
+    "vue3-carousel": "^0.3.0",
     "vue3-cookies": "^1.0.6",
     "vuetify": "^3.1.8",
     "vuex": "^4.1.0",
