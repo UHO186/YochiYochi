@@ -4,11 +4,14 @@
         <div v-if="isFinished" class="game-finished">
             <h2>축하합니다!</h2>
             <p>모든 단어를 맞췄습니다.</p>
-            <button v-if="isFinished" @click="completePage">다시하기</button>
+            <button class="btn btn-outline-secondary mb-3" v-if="isFinished" @click="completePage">다시하기</button>
         </div>
-        <button v-if="!isStarted && !isFinished" @click="startGame">게임 시작</button>
-        <button v-if="isGameOver" @click="restartGame">다시하기</button>
-        <h3>{{ this.typed }}</h3>
+        <div v-if="this.typed" class="d-flex flex-column align-items-center">
+            <input class="form-control mb-2 rains-container" type="text" :value="this.typed"
+                aria-label="Disabled input example" disabled readonly />
+        </div>
+        <button class="btn btn-outline-primary mb-3" v-if="!isStarted && !isFinished" @click="startGame">게임 시작</button>
+        <button class="btn btn-outline-secondary mb-3" v-if="isGameOver" @click="restartGame">다시하기</button>
     </div>
 </template>
 
@@ -19,7 +22,7 @@ import { useRouter } from 'vue-router';
 export default {
     data() {
         return {
-            targets: ['スイカ'],
+            targets: [],
             typed: '',
             score: 0,
             speed: 0.2,
@@ -39,7 +42,8 @@ export default {
             targetsPerSecond: 0.3, // 1초에 targets가 떨어지는 개수
             targetsInterval: null,
             isFinished: false,
-            word: []
+            word: [],
+            isScorePosted: false // 최종 점수가 서버에 전송되었는지 여부를 나타내는 변수
         };
     },
     mounted() {
@@ -117,6 +121,9 @@ export default {
             if (this.isStarted) {
                 requestAnimationFrame(loop);
             }
+            if (this.isScorePosted) {
+                this.completeWord()
+            }
         };
         this.loop = loop;
         requestAnimationFrame(this.loop);
@@ -143,7 +150,7 @@ export default {
         },
         startGame() {
             if (this.level === 1) {
-                const numTargetsToAdd = 4;
+                const numTargetsToAdd = 1;
                 for (let i = 0; i < numTargetsToAdd; i++) {
                     let randomIndex;
                     do {
@@ -224,7 +231,9 @@ export default {
             }
 
             if (this.targets.length === 0) {
-                this.completePage()
+                // 게임이 끝난 경우
+                // this.ctx.clearRect(0, 0, this.width, this.height);
+                this.completePage(); // 여기에 completePage() 함수 호출 추가
                 return;
             }
         },
@@ -236,7 +245,6 @@ export default {
             ctx.fillText("Game Start", this.width / 2, this.height / 2);
             ctx.font = "36px sans-serif";
         },
-
         drawScore(ctx) {
             ctx.font = this.font;
             ctx.fillStyle = "black";
@@ -252,7 +260,7 @@ export default {
             ctx.fillStyle = "black";
             ctx.fillText(`Final Score: ${this.score}`, this.width / 2, this.height / 2 + 50);
         },
-        completePage() {
+        completeWord(ctx) {
             ctx.font = "60px sans-serif";
             ctx.fillStyle = "green";
             ctx.textAlign = "center";
@@ -260,6 +268,16 @@ export default {
             ctx.font = "36px sans-serif";
             ctx.fillStyle = "black";
             ctx.fillText(`Final Score: ${this.score}`, this.width / 2, this.height / 2 + 50);
+        },
+        completePage() {
+            // 이미 최종 점수가 전송된 경우 함수를 빠져나옵니다.
+            if (this.isScorePosted) return;
+
+            // 최종 점수를 서버에 전송합니다.
+            this.postGameOver();
+
+            // isScorePosted 변수를 true로 설정합니다.
+            this.isScorePosted = true;
         },
         async getWord() {
             try {
@@ -275,6 +293,7 @@ export default {
                     game_id: 2,
                     score: this.score
                 });
+                return;
             } catch (err) {
                 console.error(err);
             }
@@ -288,5 +307,10 @@ canvas {
     border: 2px solid black;
     display: block;
     margin: 0 auto;
+}
+
+.rains-container {
+    width: 20em;
+    text-align: center;
 }
 </style>

@@ -130,7 +130,8 @@
                 </div>
                 <div>
                     <button class="btn btn-outline-primary" v-if="!needLogin" @click="saveImage()">커스텀 이미지 저장</button>
-                    <button class="btn btn-outline-primary" v-if="!isAdmin" @click="adminSave()">이미지 저장</button>
+                    <button class="btn btn-outline-primary" v-if="!this.$store.state.auth.needAdmin"
+                        @click="adminSave()">이미지 저장</button>
                 </div>
             </div>
             <!-- <div class="output">
@@ -230,6 +231,7 @@ export default {
                 formdata.append("attachment", blob, "img.png");
 
                 await this.$store.dispatch("game/storeCustomImg", formdata);
+                alert('이미지를 성공적으로 보냈습니다.')
             } catch (err) {
                 console.error(err);
             }
@@ -243,6 +245,7 @@ export default {
                 formdata.append("attachment", blob, "img.png");
 
                 await this.$store.dispatch("game/storeImg", formdata);
+                alert('이미지를 성공적으로 보냈습니다.')
             } catch (err) {
                 console.error(err);
             }

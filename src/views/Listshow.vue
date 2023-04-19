@@ -1,44 +1,46 @@
 <template>
     <div>
+        <!-- {{ this.$store.state.auth.needAdmin }}
+        {{ this.$store.state }} -->
         <h3 class="display-3">글 상세보기</h3>
         <div v-if="post">
-            <input class="form-control mb-2 w-50" type="text" :value="post.post_title" v-if="whatPage === 'community'"
+            <input class="form-control mb-2 w-50" :value="post.post_title || post.qna_title"
                 aria-label="Disabled input example" disabled readonly />
-            <input class="form-control mb-2 w-50" type="text" :value="post.qna_title" v-if="whatPage === 'qna'"
-                aria-label="Disabled input example" disabled readonly />
-            <textarea class="form-control mb-2" type="text" :value="post.post_content" v-if="whatPage === 'community'"
-                aria-label="Disabled input example" disabled readonly />
-            <textarea class="form-control mb-2" type="text" :value="post.qna_content" v-if="whatPage === 'qna'"
+            <textarea class="form-control mb-2" :value="post.post_content || post.qna_content"
                 aria-label="Disabled input example" disabled readonly />
         </div>
     </div>
 
-    <div v-show="whatPage === 'community' || whatPage === 'qna'">
-        <button class="btn btn-outline-secondary mb-3" @click="goEditor()">수정</button>
-        <button class="btn btn-outline-secondary mb-3" v-if="whatPage === 'community'" @click="deletePost()">삭제</button>
-        <button class="btn btn-outline-secondary mb-3" v-if="whatPage === 'qna'" @click="deleteQna()">삭제</button>
+    <div class="d-flex justify-content-center mb-3"
+        v-if="post && post.users && (!this.$store.state.auth.needAdmin || post.users.name === this.user)">
+        <button class="btn btn-outline-secondary" @click="goEditor()">수정</button>
+        <button class="btn btn-outline-secondary" @click="whatPage === 'community' ? deletePost() : deleteQna()">삭제</button>
     </div>
-
     <div class="list-container">
         <div class="row justify-content-center">
-            <Writeform class="w-50" v-model="comment" v-show="whatPage === 'community' || whatPage === 'qna'"
+            <Writeform class="w-50" v-model="comment"
+                v-show="whatPage === 'community' || (whatPage === 'qna' && !this.$store.state.auth.needAdmin)"
                 :names="whatPage === 'community' ? '댓글' : '답변'" />
+
         </div>
-        <button class="btn btn-outline-secondary mb-3"
+        <button v-if="whatPage === 'community' || (!this.$store.state.auth.needAdmin && whatPage === 'qna')"
+            class="btn btn-outline-secondary mb-3"
             @click="whatPage === 'community' ? postComment() : postAnswer()">작성</button>
         <h3>{{ whatPage === "community" ? "댓글" : "답변" }}</h3>
-        <div v-if="whatPage === 'community'" class="d-flex flex-column align-items-center">
-            <div class="input-group mb-3 w-50" v-for="c in comments" v-bind:key="c">
-                <span class="input-group-text">{{ "작성자 : " + c.users.name }}</span>
-                <input class="form-control" :placeholder="c.comment" disabled />
-                <button class="btn btn-outline-secondary" @click="delComment(c)">삭제</button>
+        <div class="d-flex flex-column align-items-center">
+            <div class="input-group mb-3 w-50" v-for="comment in comments" :key="comment.id">
+                <span class="input-group-text">{{ "작성자 : " + comment.users.name }}</span>
+                <input class="form-control" :placeholder="comment.comment" disabled />
+                <button v-if="!this.$store.state.auth.needAdmin || comment.users.name === this.$store.state.user"
+                    class="btn btn-outline-secondary" @click="delComment(comment)">삭제</button>
             </div>
         </div>
-        <div v-if="whatPage === 'qna'" class="d-flex flex-column align-items-center">
-            <div class="input-group mb-3 w-50" v-for="a in answer" v-bind:key="a">
+        <div class="d-flex flex-column align-items-center" v-if="whatPage === 'qna'">
+            <div class="input-group mb-3 w-50" v-for="a in answer" :key="answer.id">
                 <span class="input-group-text">답변</span>
                 <input class="form-control" :placeholder="a.comment" disabled />
-                <button class="btn btn-outline-secondary" @click="delAnswer(a, adminName)">삭제</button>
+                <button v-if="!this.$store.state.auth.needAdmin" class="btn btn-outline-secondary"
+                    @click="delAnswer(a)">삭제</button>
             </div>
         </div>
     </div>
@@ -47,6 +49,7 @@
 <script>
 import Writeform from "../components/write/Writeform.vue";
 import Listshowdetail from "../components/detail/Listshowdetail.vue";
+import { mapGetters, mapState } from 'vuex'
 
 export default {
     data() {
@@ -62,11 +65,15 @@ export default {
             ),
         };
     },
+    computed: {
+        ...mapGetters(["user"])
+    },
     components: {
         Listshowdetail,
         Writeform,
     },
     mounted() {
+        this.someMethod()
         if (this.whatPage === "community") {
             this.getData();
         } else {
@@ -74,6 +81,9 @@ export default {
         }
     },
     methods: {
+        someMethod() {
+            this.$store.dispatch("setUser");
+        },
         goEditor() {
             this.$router.push(`/${this.whatPage}/${this.$route.params.id}/editor`);
         },

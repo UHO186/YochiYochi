@@ -1,9 +1,9 @@
 <template>
     <div>
         <h1>카드 기억 게임</h1>
-        <button @click="customUseImg">커스텀 이미지 사용</button>
+        <button v-if="!gameStarted" class="btn btn-outline-secondary mb-3" @click="customUseImg">커스텀 이미지 사용</button>
         <div v-if="!gameStarted">
-            <button @click="startGame">게임 시작</button>
+            <button class="btn btn-outline-primary mb-3" @click="startGame">게임 시작</button>
         </div>
         <div v-else>
             <div>
