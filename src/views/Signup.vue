@@ -2,25 +2,24 @@
     <div>
         <div class="d-flex flex-column align-items-center">
             <Input class="w-25 " names="이름" placeholders="ex) 홍길동" v-model="value.name" :valids="valid.nameHasError"
-                :passwords="false" />
+                :passwords="false" :confirms="false" />
         </div>
-        <div class="d-flex flex-column align-items-center">
+        <div class="d-flex flex-column align-items-center input-group">
             <Input class="w-50" names="E-mail" placeholders="ex) kream@kream.co.kr" v-model="value.email"
-                :valids="valid.emailHasError" :passwords="false" />
-            <!-- <Input names="E-mail" placeholders="ex) kream@kream.co.kr" v-model="value.email" :valids="true" /> -->
+                :valids="valid.emailHasError" :passwords="false" :confirms="true" />
         </div>
         <div class="d-flex flex-column align-items-center">
             <!-- Boolean 값만 넣어주고 싶다면 true, false로만 -->
             <Input class="w-50" names="비밀번호" placeholders="영문, 숫자, 특수문자 조합 8-16자" v-model="value.password" :passwords="true"
-                :valids="valid.passwordHasError" />
+                :valids="valid.passwordHasError" :confirms="false" />
         </div>
         <div class="d-flex flex-column align-items-center">
             <Input class="w-50" names="비밀번호 확인" v-model="value.password_confirmation" :passwords="true"
-                :valids="valid.passworConfirmdHasError" />
+                :valids="valid.passworConfirmdHasError" :confirms="false" />
         </div>
         <div class="d-flex flex-column align-items-center">
             <Input class="w-50" names="전화번호" placeholders="ex) 010-0000-1111" v-model="value.tel" :passwords="false"
-                :valids="valid.telHasError" />
+                :valids="valid.telHasError" :confirms="false" />
         </div>
         <div>
             <button class="btn btn-outline-primary" type="button" @click="signup()">작성</button>
@@ -30,7 +29,7 @@
 
 <script>
 import Input from "../components/signup/Input.vue";
-import { useStore } from "vuex";
+import { useStore, mapActions } from "vuex";
 
 export default {
     data() {
@@ -100,13 +99,7 @@ export default {
         },
         async signup() {
             const store = useStore();
-            if (
-                this.valid.nameHasError ||
-                this.valid.emailHasError ||
-                this.valid.passwordHasError ||
-                this.valid.passworConfirmdHasError ||
-                this.valid.telHasError
-            ) {
+            if (this.valid.nameHasError || this.valid.emailHasError || this.valid.passwordHasError || this.valid.passworConfirmdHasError || this.valid.telHasError) {
                 try {
                     await this.$store.dispatch("auth/signup", this.value);
                     this.$router.push({ name: "login" });
@@ -114,6 +107,7 @@ export default {
                     console.log(err);
                 }
             } else {
+                alert('빈칸을 채워주세요.')
                 return;
             }
         },

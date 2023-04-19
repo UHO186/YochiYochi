@@ -18,6 +18,10 @@
 <script>
 export default {
     props: {
+        confirms: {
+            type: Boolean,
+            default: true
+        },
         names: String,
         placeholders: String,
         // v-model을 사용할 때 필요

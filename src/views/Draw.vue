@@ -119,13 +119,13 @@
                         <p style="margin-bottom: 0">배경 색깔</p>
                         <input type="color" v-model="backgroundColor" />
                     </div>
-                    <div class="input-group mb-3">
-                        <p style="margin-bottom: 0">업로드 이미지</p>
-                        <input type="file" @change="setImage($event)" />
+                    <div class="filebox">
+                        <label for="ex_file">이미지 업로드</label>
+                        <input type="file" id="ex_file" @change="setImage($event)" />
                     </div>
-                    <div class="input-group mb-3">
-                        <p style="margin-bottom: 0">업로드 워터마크 이미지</p>
-                        <input type="file" @change="setWatermarkImage($event)" />
+                    <div class="filebox">
+                        <label for="ex_file2">워터마크 이미지 업로드</label>
+                        <input type="file" id="ex_file2" @change="setWatermarkImage($event)" />
                     </div>
                 </div>
                 <div>
@@ -274,5 +274,31 @@ body {
 .button-container>* {
     margin-top: 15px;
     margin-right: 10px;
+}
+
+.filebox label {
+    display: inline-block;
+    padding: .5em .75em;
+    color: #6200ff;
+    font-size: inherit;
+    line-height: normal;
+    vertical-align: middle;
+    background-color: #ffffff;
+    cursor: pointer;
+    border: 1px solid #000000;
+    border-bottom-color: #000000;
+    border-radius: .25em;
+}
+
+.filebox input[type="file"] {
+    /* 파일 필드 숨기기 */
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
 }
 </style>

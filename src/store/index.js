@@ -10,7 +10,10 @@ import game from "./game/game";
 const store = createStore({
     state: {
         rootState: "aaa",
-        user: null,
+        user: {
+            email: null,
+            name: null,
+        },
     },
     mutations: {
         rootState(state, payload) {
