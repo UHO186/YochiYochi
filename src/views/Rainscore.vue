@@ -216,7 +216,7 @@ export default {
             const target = this.targets[targetIndex];
             if (target && this.typed === target) {
                 this.typed = this.typed.slice(0, target.length);
-                this.score++;
+                this.score += 10;
                 this.targetsPerSecond += 0.1;
                 this.speed += 0.1;
                 this.targetsY = -100;

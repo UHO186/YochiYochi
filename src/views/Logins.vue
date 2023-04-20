@@ -21,27 +21,6 @@
 import Input from "../components/signup/Input.vue";
 import { useStore } from "vuex";
 import { computed, onMounted } from "vue";
-<<<<<<< HEAD
-import {useRouter} from "vue-router";
-
-export default {
-  components: {
-    Input,
-  },
-  setup() {
-    const store = useStore();
-    const router = useRouter();
-    const data = {
-      value: {
-        email: "",
-        password: "",
-      },
-      valid: {
-        emailHasError: true,
-        passwordHasError: true,
-      },
-    };
-=======
 import { useRouter } from 'vue-router';
 
 export default {
@@ -62,26 +41,11 @@ export default {
                 passwordHasError: true,
             },
         };
->>>>>>> 0cae1d4232a824d9d4c466a9085244eb847201ae
 
         const needLogin = computed(() => {
             console.log(store.getters["auth/needLogin"]);
             return store.getters["auth/needLogin"];
         });
-<<<<<<< HEAD
-        router.push("/");
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    return {
-      data,
-      needLogin,
-      checkAll,
-      login,
-    };
-  },
-=======
 
         function checkAll() {
             if (!data.valid.emailHasError || !data.valid.passwordHasError) {
@@ -115,6 +79,5 @@ export default {
             goSignup
         };
     },
->>>>>>> 0cae1d4232a824d9d4c466a9085244eb847201ae
 };
 </script>

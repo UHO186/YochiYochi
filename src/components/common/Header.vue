@@ -15,7 +15,10 @@
         </li>
         <li><router-link to="/rainscore">산성비게임</router-link></li>
         <li><router-link to="/cardmemory">카드기억게임</router-link></li>
-        <li><router-link to="/picturesort">그림분류게임</router-link></li>
+        <li><router-link to="/content">컨텐츠</router-link></li>
+        <li><router-link to="/profile">프로필</router-link></li>
+        <li><router-link to="/service">서비스</router-link></li>
+        <li><router-link to="/customer">공지사항</router-link></li>
         <li v-if="!needAdminString"><router-link to="/admin">관리자</router-link></li>
         <li v-if="!needLogin" @click="logout">logout</li>
         <li v-else><router-link to="/login">login</router-link></li>
@@ -26,12 +29,8 @@
 
 <script>
 import { useStore } from "vuex";
-<<<<<<< HEAD
 import { computed, onMounted } from "vue";
-import {useRouter} from "vue-router";
-=======
-import { computed, onMounted, watch } from "vue";
->>>>>>> 0cae1d4232a824d9d4c466a9085244eb847201ae
+import { useRouter } from "vue-router";
 
 export default {
   setup() {

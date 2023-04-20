@@ -30,7 +30,8 @@
             <div class="mt-5">
                 <div class="flex justify-between">
                     <p class="top">학습 내역</p>
-                    <p class="bg-black text-white p-2 text-xl rounded-xl cursor-pointer hover:text-amber-300" @click="detail">상세보기</p>
+                    <p class="bg-black text-white p-2 text-xl rounded-xl cursor-pointer hover:text-amber-300"
+                        @click="detail">상세보기</p>
                 </div>
                 <div class="flex justify-around rounded-xl border-2 border-gray-400 py-5 mt-3 text-lg">
                     <p class="bg-red-500 rounded-3xl w-[30%] py-10">놀이1</p>
@@ -41,7 +42,8 @@
         </div>
     </div>
     <div class="flex justify-start">
-        <p class="text-xl font-semibold cursor-pointer bg-black text-white rounded-lg p-2 hover:text-amber-300 mt-3" @click="backGame">돌아가기</p>
+        <p class="text-xl font-semibold cursor-pointer bg-black text-white rounded-lg p-2 hover:text-amber-300 mt-3"
+            @click="backGame">돌아가기</p>
     </div>
 </template>
 
@@ -51,7 +53,7 @@ import RadarChart from "../../charts/RadarChart.vue"
 export default {
     data() {
         return {
-            radarData: [10, 20, 30,40,50]
+            radarData: [10, 20, 30, 40, 50]
         }
     },
     components: {
@@ -70,12 +72,20 @@ export default {
 
 <style>
 .top {
-    font-size: 1.875rem/* 30px */;
-    line-height: 2.25rem/* 36px */;
+    font-size: 1.875rem
+        /* 30px */
+    ;
+    line-height: 2.25rem
+        /* 36px */
+    ;
 }
 
 .tb {
-    font-size: 1rem/* 16px */;
-    line-height: 1.5rem/* 24px */;
+    font-size: 1rem
+        /* 16px */
+    ;
+    line-height: 1.5rem
+        /* 24px */
+    ;
 }
 </style>

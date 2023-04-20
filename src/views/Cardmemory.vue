@@ -73,11 +73,11 @@ export default {
             let startTime = Date.now();
             let intervalID = setInterval(() => {
                 this.postGameOver();
-            }, 9900);
+            }, 59990);
 
             this.timer = setInterval(() => {
                 const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
-                this.timeRemaining = Math.max(0, 10 - elapsedTime);
+                this.timeRemaining = Math.max(0, 60 - elapsedTime);
                 if (this.timeRemaining === 0) {
                     clearInterval(this.timer);
                     clearInterval(intervalID); // clear interval here
@@ -129,7 +129,10 @@ export default {
                 const numMatches = this.cards.filter(card => card.visible).length / 2;
 
                 if (numMatches === this.cardValues.length / 2) {
-                    this.gameOver();
+                    this.postGameOver();
+                    let intervalID = setInterval(() => {
+                        this.gameOver();
+                    }, 1000);
                 }
 
                 this.clickable = false;

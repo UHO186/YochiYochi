@@ -5,31 +5,6 @@ import axios from "axios";
 const { cookies } = useCookies();
 
 axiosinstance.interceptors.request.use(
-<<<<<<< HEAD
-  async (config) => {
-    if (import.meta.env.VITE_IS_LOGIN === "Y" && cookies.get("accessToken")) {
-      config.headers["Authorization"] = `Bearer ${cookies.get("accessToken")}`;
-    }
-    return config;
-  },
-  (error) => {
-    console.error("axios.js request error : ", error);
-    return Promise.reject(error);
-  }
-);
-
-axiosinstance.interceptors.response.use(
-  (res) => {
-    return res;
-  },
-  async (error) => {
-    //console.error("axios.js response error : ", error);
-    if (import.meta.env.VITE_IS_LOGIN === "Y") {
-      const errorRes = error.response;
-      const originalRequest = error.config;
-      if (errorRes.status === 401) {
-        // access token이 만료되었거나 없는 경우
-=======
     async (config) => {
         console.log("axios.js request : ", config);
         if (import.meta.env.VITE_IS_LOGIN === "Y" && cookies.get("accessToken")) {
@@ -57,7 +32,6 @@ axiosinstance.interceptors.response.use(
             // console.log("error:", errorRes);
             if (errorRes.status === 401) {
                 // access token이 만료되었거나 없는 경우
->>>>>>> 0cae1d4232a824d9d4c466a9085244eb847201ae
 
                 if (errorRes.statusText === "Unauthorized") {
                     const refreshToken = cookies.get("refreshToken");
