@@ -65,7 +65,8 @@ export default {
             if(e.target.id == "proName1" || e.target.id == "proName2") {
                 this.proUpdate.name = !this.proUpdate.name
                 if(e.target.id == "proName2" && this.loginUser.kidname != null && this.loginUser.kidname != '') {
-                    // await this.$store.dispatch("auth/user")
+                    // const xxx = await this.$store.dispatch("auth/updateUser", {name: "rrr"})
+                    // console.log(xxx);
                     this.userProfile.name = this.loginUser.kidname
                 } else {
                     this.userProfile.age = "이름을 입력해주세요"

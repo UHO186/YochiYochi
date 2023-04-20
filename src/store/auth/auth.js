@@ -35,13 +35,12 @@ export default {
         throw err;
       }
     },
-    async updateuser(userdata) {
+    async updateUser(userdata) {
       try {
         const rs = await axios.post(
           "http://localhost/api/updateuser",
           userdata
         );
-        console.log(rs.data.msg);
         return rs.data.msg;
       } catch (error) {
         console.error(error);
