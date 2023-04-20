@@ -6,11 +6,9 @@ const { cookies } = useCookies();
 
 axiosinstance.interceptors.request.use(
   async (config) => {
-    console.log("axios.js request : ", config);
     if (import.meta.env.VITE_IS_LOGIN === "Y" && cookies.get("accessToken")) {
       config.headers["Authorization"] = `Bearer ${cookies.get("accessToken")}`;
     }
-    console.log("axios.js request : ", config);
     return config;
   },
   (error) => {
@@ -21,7 +19,6 @@ axiosinstance.interceptors.request.use(
 
 axiosinstance.interceptors.response.use(
   (res) => {
-    console.log("응답헤더확인", res.headers);
     return res;
   },
   async (error) => {
@@ -29,7 +26,6 @@ axiosinstance.interceptors.response.use(
     if (import.meta.env.VITE_IS_LOGIN === "Y") {
       const errorRes = error.response;
       const originalRequest = error.config;
-      // console.log("error:", errorRes);
       if (errorRes.status === 401) {
         // access token이 만료되었거나 없는 경우
 

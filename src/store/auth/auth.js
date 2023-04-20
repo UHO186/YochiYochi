@@ -27,7 +27,26 @@ export default {
         throw err;
       }
     },
-
+    async user({ commit }) {
+      try{
+        const rs = await axios.get("http://localhost/api/user");
+        return rs.data;
+      } catch {
+        throw err;
+      }
+    },
+    async updateuser(userdata) {
+      try {
+        const rs = await axios.post(
+          "http://localhost/api/updateuser",
+          userdata
+        );
+        console.log(rs.data.msg);
+        return rs.data.msg;
+      } catch (error) {
+        console.error(error);
+      }
+    },
     async login({ commit }, params) {
       try {
         const rs = await axios.post("http://localhost/api/login", params);
@@ -42,7 +61,6 @@ export default {
         }
         return rs.data.msg;
       } catch (err) {
-        console.error(err);
         throw err;
       }
     },
@@ -51,7 +69,6 @@ export default {
         const rs = await axios.post("http://localhost/api/auth");
 
         if (rs.data.ok) {
-          console.log("verify success");
           return true;
         } else {
           console.error("토큰인증실패");

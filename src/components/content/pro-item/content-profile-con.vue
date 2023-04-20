@@ -1,8 +1,8 @@
 <template>
-    <div v-show="proCa == `t1`">
-        <memInf @backGame="backGame"></memInf>
+    <div v-if="proCa == `t1`">
+        <memInf @backGame="backGame" :loginUser="loginUser" :key="loginUser"></memInf>
     </div>
-    <div v-show="proCa == `t2`">
+    <div v-if="proCa == `t2`">
         <div v-if="!det">
             <stat @detail="detail" @backGame="backGame"></stat>
         </div>
@@ -10,7 +10,7 @@
             <statDetail @detail="detail"></statDetail>
         </div>
     </div>
-    <div v-show="proCa == `t3`">
+    <div v-if="proCa == `t3`">
         <purchase @backGame="backGame"></purchase>
     </div>
 </template>
@@ -26,6 +26,7 @@ export default {
     data() {
         return {
             det: false,
+            loginUser: [],
         }
     },
     components: {
@@ -42,14 +43,10 @@ export default {
         },
         backGame() {
             this.$emit("backGame")
-        }
+        },
     },
-    mounted() {
-        
+    async mounted() {
+        this.loginUser = await this.$store.dispatch("auth/user")
     }
 }
 </script>
-
-<style>
-
-</style>

@@ -38,7 +38,7 @@ import conProfile from "../components/content/pro-item/content-profile-item.vue"
 export default {
     data() {
         return {
-            first: true,  // 처음확인
+            first: false,  // 처음확인
             cateList: false, // 영역 정렬
             topicList: false, // 주제 정렬
             profile: false,
@@ -48,13 +48,12 @@ export default {
         }
     },
     mounted() {
-        // 유저 데이터 받아와서 처음인지 아닌지 확인 메소드 만들기'
+        this.getData()
     },
     methods: {
         /* 첫페이지 메소드 */
         saveAge(e) {
-            // 나이 선택 e == 선택한 나이
-            console.log("나이선택", e)
+            console.log("나이선택", e) // 나이 선택 e == 선택한 나이
         },
         levelTest(e) {
             if(e == "아니요") {
@@ -97,10 +96,30 @@ export default {
             this.profile = true
         },
         backGame() {
+            console.log("되냐")
             this.profile = false
             this.cateList = true
+        },
+        // 기타
+        async getData() {
+            // const store = {game_id: 1, score: 123}
+            // this.$store.dispatch("game/storeScore", store)
+            const gameData = await this.$store.dispatch("game/indexScore")
+            const loginUser = await this.$store.dispatch("auth/user")
+            var firstCheck = false
+            gameData.every(data => {
+                if(data.user_id == loginUser.id) {
+                    firstCheck = true
+                    return false
+                }
+            });
+            if(firstCheck){
+                this.first = false
+                this.cateList = true
+            } else {
+                this.first = true
+            }
         }
-        
     },
     components: {
         conHeader,
@@ -124,7 +143,7 @@ export default {
     border-radius: 10px;
     padding: 50px;
     margin-top: 1px;
-    width: 90%;
+    width: 100%;
     background-color: rgb(255, 255, 255);
     min-height: 720px;
 }

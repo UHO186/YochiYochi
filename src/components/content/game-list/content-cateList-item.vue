@@ -1,10 +1,10 @@
 <template>
     <div class="mt-16 text-white text-xl font-semibold flex items-start justify-between">
-        <p class="gList px-4 py-14">{{ hmm[0] }}</p>
-        <p class="gList px-4 py-14 mt-28">{{ hmm[1] }}</p> 
-        <p class="gList px-4 py-14 mt-16">{{ hmm[2] }}</p>
-        <p class="gList px-4 py-14 mt-24">{{ hmm[3] }}</p>
-        <p class="gList px-4 py-14 mt-10">{{ hmm[4] }}</p>
+        <p class="gList w-[141px] py-14">{{ hmm[0] }}</p>
+        <p class="gList w-[141px] py-14 mt-28">{{ hmm[1] }}</p> 
+        <p class="gList w-[141px] py-14 mt-16">{{ hmm[2] }}</p>
+        <p class="gList w-[141px] py-14 mt-24">{{ hmm[3] }}</p>
+        <p class="gList w-[141px] py-14 mt-10">{{ hmm[4] }}</p>
     </div>
     <div class="flex justify-start">
         <p class="text-xl font-semibold cursor-pointer bg-black text-white rounded-lg p-2 hover:text-amber-300 mt-5" @click="backCate">돌아가기</p>

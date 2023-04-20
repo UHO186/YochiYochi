@@ -1,6 +1,6 @@
 <template>
     <proHeader @proCate="proCate"></proHeader>
-    <proContent :proCa="cate"></proContent>
+    <proContent :proCa="cate" @backGame="backGame"></proContent>
 </template>
 
 <script>
@@ -20,7 +20,10 @@ export default {
     methods: {
         proCate(proCate) {
             this.cate = proCate
+        },
+        backGame() {
+            this.$emit("backGame")
         }
-    }
+    },
 }
 </script>

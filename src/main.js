@@ -5,9 +5,10 @@ import router from "./router";
 import store from "./store";
 import axios from "./plugins/axios";
 import axiosInterceptor from "./plugins/interceptor";
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faChevronLeft, faChevronRight, faBars, faEllipsis, faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { faChevronLeft, faChevronRight, faBars, faEllipsis, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+
 axiosInterceptor(store);
 
 import App from "./App.vue";

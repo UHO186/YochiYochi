@@ -45,14 +45,23 @@ import QnaListItem from '../components/customer/qna-list-item.vue';
 export default {
     data() {
         return {
-            notice_list: '',
-            faq_list: '',
-            qna_list: '',
+            notice_list: [],
+            faq_list: [],
+            qna_list: [],
             notice_page: 1,
         }
     },
-    mounted() {
-
+    async mounted() {
+        try {
+            /* for(var i = 1; i < 50; i++) {
+                const store = {qna_title: `test`, qna_content: `testContent`, category: 1, attachment: null}
+                this.$store.dispatch("qna/createQna", store)
+            } */
+            this.qna_list = await this.$store.dispatch("qna/fetchQnas")
+            console.log(this.qna_list)
+        } catch (error) {
+            console.log(error)
+        }
     },
     methods: {
 
