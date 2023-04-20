@@ -5,7 +5,7 @@
         <Boardpage :list-array="postlist" what-page="/community/" :pageNum="0" />
 
         <div>
-            <button @click="goWrite()">등록</button>
+            <button class="btn btn-primary" @click="goWrite()">등록</button>
         </div>
     </div>
 </template>

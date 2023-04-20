@@ -1,13 +1,13 @@
 <template>
     <div>
         <h3>수정</h3>
-        <Writeform :placeholders="value.title" v-model="value.title" />
-        <Writeform :placeholders="value.textdetail" v-model="value.textdetail" />
+        <Writeform names="제목" :placeholders="value.title" v-model="value.title" />
+        <Writeform names="내용" :placeholders="value.textdetail" v-model="value.textdetail" />
     </div>
-    <button v-if="whatPage === 'community'" @click="postBoardEditor()">
+    <button class="btn btn-outline-secondary mb-3" v-if="whatPage === 'community'" @click="postBoardEditor()">
         수정
     </button>
-    <button v-if="whatPage === 'qna'" @click="postQnaEditor()">수정</button>
+    <button class="btn btn-outline-secondary mb-3" v-if="whatPage === 'qna'" @click="postQnaEditor()">수정</button>
 </template>
 
 <script>
@@ -56,9 +56,9 @@ export default {
                     "qna/getQna",
                     this.$route.params.id
                 );
-                console.log("qna", postlist.pocket);
-                this.value.title = postlist.pocket.qna_title;
-                this.value.textdetail = postlist.pocket.qna_content;
+                console.log("qna", postlist);
+                this.value.title = postlist[0].qna_title;
+                this.value.textdetail = postlist[0].qna_content;
             } catch (err) {
                 console.error(err);
             }

@@ -1,5 +1,5 @@
 <template>
-  <header>
+  <div>
     <h1>YochiYochi</h1>
     <div>
       <ul>
@@ -7,21 +7,31 @@
         <li><router-link to="/community">자유게시판</router-link></li>
         <li><router-link to="/qna">QnA</router-link></li>
         <li><router-link to="/freeboard">최신글</router-link></li>
-        <li><router-link to="/draw">그림그리기</router-link></li>
+        <li>
+          <router-link :to="{
+            path: '/draw',
+            query: { isAdmin: needAdminString.value, needLogin: needLogin.value }
+          }">그림그리기</router-link>
+        </li>
         <li><router-link to="/rainscore">산성비게임</router-link></li>
         <li><router-link to="/cardmemory">카드기억게임</router-link></li>
         <li><router-link to="/picturesort">그림분류게임</router-link></li>
+        <li v-if="!needAdminString"><router-link to="/admin">관리자</router-link></li>
         <li v-if="!needLogin" @click="logout">logout</li>
         <li v-else><router-link to="/login">login</router-link></li>
       </ul>
     </div>
-  </header>
+  </div>
 </template>
 
 <script>
 import { useStore } from "vuex";
+<<<<<<< HEAD
 import { computed, onMounted } from "vue";
 import {useRouter} from "vue-router";
+=======
+import { computed, onMounted, watch } from "vue";
+>>>>>>> 0cae1d4232a824d9d4c466a9085244eb847201ae
 
 export default {
   setup() {
@@ -30,6 +40,10 @@ export default {
     // computed 속성으로 needLogin 값을 가져옴
     const needLogin = computed(() => {
       return store.getters["auth/needLogin"];
+    });
+
+    const needAdminString = computed(() => {
+      return store.getters["auth/needAdmin"];
     });
 
     // logout 액션 실행 함수
@@ -41,6 +55,7 @@ export default {
 
     return {
       needLogin,
+      needAdminString,
       logout,
     };
   },

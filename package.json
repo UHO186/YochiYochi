@@ -9,12 +9,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
     "@fortawesome/free-brands-svg-icons": "^6.4.0",
     "@fortawesome/free-regular-svg-icons": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/vue-fontawesome": "^3.0.3",
     "@tailwindcss/postcss7-compat": "^2.2.17",
+=======
+    "@splidejs/vue-splide": "^0.6.12",
+>>>>>>> 0cae1d4232a824d9d4c466a9085244eb847201ae
     "@tensorflow-models/pose-detection": "^2.0.0",
     "@tensorflow/tfjs-backend-wasm": "^4.2.0",
     "@tensorflow/tfjs-backend-webgl": "^4.2.0",
@@ -25,10 +29,16 @@
     "html-webpack-plugin": "^5.5.0",
     "npm-check-updates": "^16.7.13",
     "scatter-gl": "^0.0.13",
+<<<<<<< HEAD
     "vue": "^3.2.45",
     "vue-chartjs": "^4.1.2",
+=======
+    "v": "^0.3.0",
+    "vue": "^3.2.47",
+>>>>>>> 0cae1d4232a824d9d4c466a9085244eb847201ae
     "vue-drawing-canvas": "^1.0.14",
     "vue-router": "^4.1.6",
+    "vue3-carousel": "^0.3.0",
     "vue3-cookies": "^1.0.6",
     "vuetify": "^3.1.8",
     "vuex": "^4.1.0",
