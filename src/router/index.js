@@ -15,7 +15,7 @@ import Draw from "../views/Draw.vue";
 import Cardmemory from "../views/Cardmemory.vue";
 import Picturesort from "../views/Picturesort.vue";
 import Rainscore from "../views/Rainscore.vue";
-// import Movenet from "../components/MoveTest.vue";
+import Movenet from "../views/Movenet.vue";
 
 import { useCookies } from "vue3-cookies";
 
@@ -73,11 +73,16 @@ const routes = [
     name: "Qwrite",
     component: Write,
   },
-  // {
-  //   path: "/movenet",
-  //   name: "movenet",
-  //   component: Movenet,
-  // },
+  {
+    path: "/movenet/rain",
+    name: "movenetRain",
+    component: Movenet,
+  },
+  {
+    path: "/movenet/rand",
+    name: "movenetRand",
+    component: Movenet,
+  },
   {
     path: "/community/:id",
     name: "comments",
@@ -126,7 +131,7 @@ export default function (store) {
     routes,
   });
   router.beforeEach(async (to, from, next) => {
-    if (to.name === "login" || to.name === "signup" || to.name === "main") {
+    if (to.name === "login" || to.name === "signup" || to.name === "main" || to.name === "movenetRain" || to.name === "movenetRand") {
       return next();
     }
     if (import.meta.env.VITE_IS_LOGIN === "Y") {

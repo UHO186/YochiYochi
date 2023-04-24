@@ -55,6 +55,7 @@ export class Camera {
   constructor() {
     this.video = document.getElementById('video');
     this.canvas = document.getElementById('output');
+    this.e_canvas = document.getElementById('e_canvas');
     this.ctx = this.canvas.getContext('2d');
     this.scatterGLEl = document.querySelector('#scatter-gl-container');
     this.scatterGL = new scatter.ScatterGL(this.scatterGLEl, {
@@ -114,6 +115,8 @@ export class Camera {
 
     camera.canvas.width = videoWidth;
     camera.canvas.height = videoHeight;
+    camera.e_canvas.width = videoWidth;
+    camera.e_canvas.height = videoHeight;
     const canvasContainer = document.querySelector('.canvas-wrapper');
     canvasContainer.style = `width: ${videoWidth}px; height: ${videoHeight}px`;
  
