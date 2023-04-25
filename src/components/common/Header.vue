@@ -8,18 +8,27 @@
         <li><router-link to="/qna">QnA</router-link></li>
         <li><router-link to="/freeboard">최신글</router-link></li>
         <li>
-          <router-link :to="{
-            path: '/draw',
-            query: { isAdmin: needAdminString.value, needLogin: needLogin.value }
-          }">그림그리기</router-link>
+          <router-link
+            :to="{
+              path: '/draw',
+              query: {
+                isAdmin: needAdminString.value,
+                needLogin: needLogin.value,
+              },
+            }"
+            >그림그리기</router-link
+          >
         </li>
         <li><router-link to="/rainscore">산성비게임</router-link></li>
         <li><router-link to="/cardmemory">카드기억게임</router-link></li>
+        <li><router-link to="/picturesort">그림분류게임</router-link></li>
         <li><router-link to="/content">컨텐츠</router-link></li>
         <li><router-link to="/profile">프로필</router-link></li>
         <li><router-link to="/service">서비스</router-link></li>
         <li><router-link to="/customer">공지사항</router-link></li>
-        <li v-if="!needAdminString"><router-link to="/admin">관리자</router-link></li>
+        <li v-if="!needAdminString">
+          <router-link to="/admin">관리자</router-link>
+        </li>
         <li v-if="!needLogin" @click="logout">logout</li>
         <li v-else><router-link to="/login">login</router-link></li>
       </ul>
@@ -47,9 +56,8 @@ export default {
 
     // logout 액션 실행 함수
     const logout = () => {
-
       store.dispatch("auth/logout");
-      router.push("/")
+      router.push("/");
     };
 
     return {
@@ -78,7 +86,7 @@ li {
   list-style: none;
 }
 
-li>a {
+li > a {
   color: black;
 }
 </style>
