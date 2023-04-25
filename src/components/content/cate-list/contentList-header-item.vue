@@ -1,6 +1,6 @@
 <template>
-    <div class="flex text-2xl">
-        <div class="basis-1/5 rounded-full bg-black text-white py-14 font-bold cursor-pointer" @click="checkPro">프로필</div>
+    <div class="flex text-2xl user-select-none">
+        <div class="basis-1/6 rounded-full bg-black text-white py-14 font-bold cursor-pointer" @click="checkPro">프로필</div>
         <div class="basis-10"></div>
         <div class="flex flex-1 py-14 rounded-full bg-slate-100">
             <p class="basis-1/12"></p>

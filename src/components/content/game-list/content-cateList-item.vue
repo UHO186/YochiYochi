@@ -1,12 +1,12 @@
 <template>
-    <div class="mt-16 text-white text-xl font-semibold flex items-start justify-between">
+    <div class="mt-16 text-white text-xl font-semibold flex items-start justify-between user-select-none">
         <p @click="moveUrls(hmm[0])" class="gList w-[141px] py-14 cursor-point">{{ hmm[0] }}</p>
         <p class="gList w-[141px] py-14 mt-28">{{ hmm[1] }}</p>
         <p class="gList w-[141px] py-14 mt-16">{{ hmm[2] }}</p>
         <p class="gList w-[141px] py-14 mt-24">{{ hmm[3] }}</p>
         <p class="gList w-[141px] py-14 mt-10">{{ hmm[4] }}</p>
     </div>
-    <div class="flex justify-start">
+    <div class="flex justify-start user-select-none">
         <p class="text-xl font-semibold cursor-pointer bg-black text-white rounded-lg p-2 hover:text-amber-300 mt-5"
             @click="backCate">돌아가기</p>
     </div>
@@ -16,6 +16,8 @@
 export default {
     data() {
         return {
+            //           빨                    핑                     파                 녹                     노
+            // color: ["rgb(243, 81, 82)", "rgb(251, 110, 208)", "rgb(36, 107, 189)", "rgb(9, 181, 128)", "rgb(254, 198, 57)"],
             sprCate: ["산성비 게임", "봄게임2", "봄게임3", "봄게임4", "봄게임5"],
             sumCate: ["카드 기억 게임", "여름게임2", "여름게임3", "여름게임4", "여름게임5"],
             autCate: ["그림 그리기", "가을게임2", "가을게임3", "가을게임4", "가을게임5"],
@@ -80,7 +82,7 @@ export default {
 .gList {
     border-width: 1px;
     border-radius: 9999px;
-    --tw-bg-opacity: 1;
-    background-color: rgb(249 168 212 / var(--tw-bg-opacity));
+    background-color: rgb(251, 110, 208);
+    cursor: pointer;
 }
 </style>

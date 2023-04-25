@@ -7,6 +7,16 @@ export default {
   mutations: {},
   getters: {},
   actions: {
+    async indexGame() {
+      try {
+        const rs = await axios.get("http://localhost/api/gameindex")
+        return rs.data
+      } catch (error) {
+        console.log(err);
+        throw err;
+      }
+    },
+
     async indexScore() {
       // 기록 목록
       try {

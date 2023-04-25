@@ -1,7 +1,7 @@
 <template>
     <div>
         <h3>카드기억게임 이미지 추가</h3>
-        <input type="file" @change="onFileChange" ref="fileInput" multiple>
+        <input type="file" @change="onFileChange" ref="fileInput">
         <button @click="uploadFile">Upload</button>
     </div>
     <div>
@@ -29,6 +29,7 @@ export default {
             }
             const formData = new FormData();
             formData.append("game_id", 1);
+            formData.append("category", 1);
             for (let i = 0; i < this.selectedFiles.length; i++) {
                 formData.append("attachment", this.selectedFiles[i]);
             }

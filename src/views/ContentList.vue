@@ -96,7 +96,6 @@ export default {
             this.profile = true
         },
         backGame() {
-            console.log("되냐")
             this.profile = false
             this.cateList = true
         },

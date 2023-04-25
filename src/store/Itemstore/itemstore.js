@@ -7,13 +7,23 @@ export default {
   mutations: {},
   getters: {},
   actions: {
-    async fetchItems() {
+    async fetchItems({ commit }) {
       // 상품 목록
       try {
         const response = await axios.get("http://localhost/api/items");
         return response.data;
       } catch (err) {
         console.error(err);
+        throw err;
+      }
+    },
+    async fetchPurchase({ commit }) {
+      // 구매 목록
+      try {
+        const res = await axios.get("http://localhost/api/purchaselist")
+        return res.data
+      } catch (error) {
+        console.log(error);
         throw err;
       }
     },

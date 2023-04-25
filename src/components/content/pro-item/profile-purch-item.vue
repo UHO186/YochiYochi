@@ -1,37 +1,39 @@
 <template>
-    <div v-for="item, index in purchase" :key="index">            
-        <div class="border-2 p-4 mt-10 font-semibold text-[14px]">
-            <div class="flex justify-between">
-                <div class="grid grid-cols-2 content-center justify-items-start text-lg">
-                    <p>2000.7.14 주문</p> <!-- 날짜 받아오기 -->
-                    <p class="ml-5">주문번호: {{item.orderNum}}</p>
-                </div>
-                <div class="bg-blue-400 text-white rounded-lg px-3 py-2 text-[15px] cursor-pointer">주문 상세보기</div>
+    <div class="border-2 p-4 mt-4 font-semibold text-[14px] user-select-none" v-for="item, index in purchase" :key="index">
+        <div class="flex justify-between">
+            <div class="grid grid-cols-2 content-center justify-items-start text-lg">
+                <p>{{ item.created_at.substring(0,10).replace(/-/g, ".") }} 주문</p> <!-- 날짜 받아오기 -->
+                <p class="ml-5">주문번호: {{item.order_number}}</p>
             </div>
-            <div class="flex border-2 p-5 mt-3 rounded-md">
-                <div class=" border-r-2" style="max-width: 200px;">
-                    <img :src="item.img" alt="상품1"> <!-- 상품+상품번호로 저장된거 가져오기-->
+            <div class="bg-blue-400 text-white rounded-lg px-3 py-2 text-[15px] cursor-pointer">주문 상세보기</div>
+        </div>
+        <div class="flex border-2 py-4 pl-2 mt-3 rounded-md">
+            <div class=" border-r-2" style="max-width: 200px;">
+                <img :src="'/item/'+itemData.find(data => data.id === item.item_id).attachment" alt="상품1"> <!-- 상품+상품번호로 저장된거 가져오기-->
+            </div>
+            <div class="ml-5 flex-1 grid content-center justify-items-start border-r-2">
+                <div class="dflex">상품번호: <p class="tblack">{{ itemData.find(data => data.id === item.item_id).id }}</p></div>
+                <div class="dflex">상품명: <p class="tblack">{{ itemData.find(data => data.id === item.item_id).item_title }}</p></div>
+                <div class="dflex">가격・수량: <p class="tblack">{{ itemData.find(data => data.id === item.item_id).price }}원・{{ item.quantity }}개</p></div>
+                <div class="dflex">주소: <p class="tblack">{{ item.address }}</p></div>
+                <div class="dflex">이름・연락처: <p class="tblack">{{ user.find(data => data.id === item.user_id).name }}・{{ user.find(data => data.id === item.user_id).tel }}</p></div>
+                <div class="dflex">배달현황: 
+                    <p class="tblack">{{ item.delivery ? "배송완료" : "배송중" }}</p>
                 </div>
-                <div class="ml-5 flex-1 grid content-center justify-items-start border-r-2">
-                    <div class="dflex">상품번호: <p class="tblack">{{ item.itemNum }}</p></div>
-                    <div class="dflex">상품명: <p class="tblack">{{ item.itemName }}</p></div>
-                    <div class="dflex">가격・수량: <p class="tblack">{{ item.price }} 원・{{ item.qty }} 개</p></div>
-                    <div class="dflex">주소: <p class="tblack">{{ item.address }}</p></div>
-                    <div class="dflex">이름・연락처: <p class="tblack">{{ item.name }}・{{ item.contact }}</p></div>
-                    <div class="dflex">배달현황: 
-                        <p class="tblack" v-if="item.shipper">배송완료</p>
-                        <p class="tblack" v-else>배송중</p>
-                    </div>
-                </div>
-                <div class="pl-10 grid content-center basis-1/5">
-                    <div class="border-2 border-blue-300 text-blue-300 py-0.5 cursor-pointer">배송조회</div>
-                    <div class="border-2 mt-2 py-0.5 cursor-pointer">주문 ・ 배송 취소</div>
-                    <div v-if="item.shipper" class="border-2 mt-2 py-0.5 cursor-pointer">리뷰 작성하기</div>
-                </div>
+            </div>
+            <div class="grid justify-items-center content-center basis-1/5">
+                <div class="border-2 border-blue-300 w-[80%] text-blue-300 py-0.5 cursor-pointer">배송조회</div>
+                <div class="border-2 mt-2 py-0.5 w-[80%] cursor-pointer">주문・배송 취소</div>
+                <div v-if="item.delivery" class="border-2 mt-2 py-0.5 w-[80%] cursor-pointer">리뷰 작성하기</div>
             </div>
         </div>
     </div>
-    <div class="flex justify-start">
+    <div class="flex items-center justify-center mt-3 user-select-none">
+        <div id="purLeft" class="bg-gray-200 py-2 px-2.5 rounded-md cursor-pointer" @click="purRecycle"><font-awesome-icon class="pr-1 pointer-events-none" icon="fa-solid fa-chevron-left"/>이전</div>
+        <div class="basis-4"></div>
+        <div id="purRight" class="bg-gray-200 py-2 px-2.5 rounded-md cursor-pointer" @click="purRecycle">다음<font-awesome-icon class="pl-1 pointer-events-none" icon="fa-solid fa-chevron-right"/></div>
+    </div>
+    <div class="flex justify-start user-select-none">
         <p class="text-xl font-semibold cursor-pointer bg-black text-white rounded-lg p-2 hover:text-amber-300 mt-3" @click="backGame">돌아가기</p>
     </div>
 </template>
@@ -40,21 +42,52 @@
 export default {
     data() {
         return {
-            testData: [],
+            itemData: [],
+            purData: [],
             purchase: [],
+            user: [],
+            page: 0,
         }
     },
-    mounted() {
-        for(var i = 1; i < 30; i++) { // 테스트용 더미 데이터
-            this.testData.push({img: "item/test1.jpg", orderNum: i, itemNum: i, itemName: "상품상품상품" ,price: 1000000, qty: i, address: "주소주소주소주소주소주소주소주소주소", contact: "010-1234-5678", name: "윤영운", shipper: true})
+    async mounted() {
+
+        this.user.push(await this.$store.dispatch("auth/user"))
+        this.itemData = await this.$store.dispatch("itemStore/fetchItems")
+        this.purData = await this.$store.dispatch("itemStore/fetchPurchase")
+
+        for(var i = this.page; i < this.page+5; i++) {
+            if(this.purData[i] != null) {
+                this.purchase.push(this.purData[i])
+            }
         }
-        for(var i = 0; i < 5; i++) {
-            this.purchase.push(this.testData[i])
-        }
+
     },
     methods: {
         backGame() {
             this.$emit("backGame")
+        },
+        purRecycle(e) {
+            if(e.target.id == "purLeft") {
+                if(this.page != 0){
+                    this.page -= 5
+                    this.purchase.splice(0,5)
+                    for(var i = this.page; i < this.page+5; i++) {
+                        if(this.purData[i] != null) {
+                            this.purchase.push(this.purData[i])
+                        }
+                    }
+                }
+            } else {
+                if(this.page + 5 <= this.purData.length) {
+                    this.page += 5
+                    this.purchase.splice(0,5)
+                    for(var i = this.page; i < this.page+5; i++) {
+                        if(this.purData[i] != null) {
+                            this.purchase.push(this.purData[i])
+                        }
+                    }
+                }
+            }
         }
     }
 }
