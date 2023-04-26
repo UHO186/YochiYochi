@@ -27,7 +27,7 @@
 <script>
     // import Object1 from '../components/movenet/object1.vue';
     import MoveNet from '../components/js/movenet';
-    
+ 
     export default {
         data() {
             e_canvas: "";
@@ -71,15 +71,18 @@
                  * @param {number} x 렌더링될 x좌표
                  * @param {number} y 렌더링될 y좌표
                  */
-                function drawSquare(ctx, x, y) {
-                    ctx.beginPath();
-                    ctx.rect(x, y, 80, 80);
-                    ctx.stroke();
+                
+                // const i = Math.floor((Math.random() * 5) + 1);
+
+                function drawImg(ctx,x, y,i) {
+                    const img = new Image();
+                    img.src = `/img/Sakura${i}.png`;
+                    ctx.drawImage(img, x, y, 180, 180);
                 }
 
-                function checkTouch(target, object) {
+                function checkTouch(target, object, width) {
                     // return true;
-                    return target.x > object.x_coor-90 && target.x < object.x_coor + 90 && target.y > object.y_coor-90 && target.y < object.y_coor + 90
+                    return width-target.x > object.x_coor-180 && width-target.x < object.x_coor + 180 && target.y > object.y_coor-180 && target.y < object.y_coor + 180
                 }
 
 
@@ -89,7 +92,6 @@
                  * @param {number} speed 사각형 내려오는거 속도
                  */
                 function drawRain(ctx, speed, width, height) {
-
                     // 객체
                     const coordObj1 = {} // 좌표 top_left : {x_coor, y_coor} top_right : {x_coor+width, y_coor} bottom_left : {x_coor, y_coor+height} bottom_right : {x_coor+width, y_coor+height}
                     e_canvas.width = width;
@@ -98,24 +100,24 @@
                     // 1초마다 객체 생성코드
                     setInterval(() => {
                         coordObj1[generateRandomString(10)] = {
-                            x_coor: Math.random() * (e_canvas.width - 80), // 640 : canvas width , 20 : rect width
+                            x_coor: Math.random() * (e_canvas.width - 180), // 640 : canvas width , 20 : rect width
                             y_coor: 0,
+                            idx : Math.floor((Math.random() * 5) + 1)
                         }
-                    }, [2000])
+                    }, [2500])
 
                     const render = (coordArr) => {
 
-                        console.log(coordObj1)
+                        // console.log(coordObj1)
                         ctx.clearRect(0, 0, e_canvas.width, e_canvas.height);
                         // 만들어진 객체 키를 이용해 사각형을 그리는 함수
 
                         Array.from(Object.keys(coordObj1)).forEach((el) => {
-                            const { x_coor, y_coor } = coordObj1[el];
+                            const { x_coor, y_coor,idx } = coordObj1[el];
                             var tempKey = undefined;
 
-                            coordArr.forEach((coord,idx) => {
-                                console.log(idx)
-                                if (checkTouch(coord, coordObj1[el])) {
+                            coordArr.forEach((coord) => {
+                                if (checkTouch(coord, coordObj1[el], e_canvas.width)) {
                                     tempKey = el
                                 }
                             });
@@ -128,7 +130,7 @@
                                 return;
                             }
 
-                            drawSquare(ctx, x_coor, y_coor)
+                            drawImg(ctx, x_coor, y_coor,idx)
                             //스피드에 따라 대충 속도변환
                             coordObj1[el].y_coor = y_coor + speed
 
@@ -157,8 +159,9 @@
                     // 1초마다 객체 생성코드
                     setInterval(() => {
                         coordObj2[generateRandomString(10)] = {
-                            x_coor: Math.random() * (e_canvas.width - 80), // 640 : canvas width , 20 : rect width
-                            y_coor: Math.random() * (e_canvas.height - 80),
+                            x_coor: Math.random() * (e_canvas.width - 120), // 640 : canvas width , 20 : rect width
+                            y_coor: Math.random() * (e_canvas.height - 120),
+                            idx : Math.floor((Math.random() * 5) + 1)
                         }
                     }, [5000])
 
@@ -167,35 +170,35 @@
                         // console.log(coordObj2)
                         ctx.clearRect(0, 0, e_canvas.width, e_canvas.height);
                         // 만들어진 객체 키를 이용해 사각형을 그리는 함수
-
                         Array.from(Object.keys(coordObj2)).forEach((el) => {
-                            const { x_coor, y_coor } = coordObj2[el];
+                            const { x_coor, y_coor, idx } = coordObj2[el];
                             var tempKey = undefined;
 
-                            coordArr.forEach((coord,idx) => {
+                            coordArr.forEach((coord) => {
                                 // console.log(idx)
-                                if (checkTouch(coord, coordObj2[el])) {
+                                if (checkTouch(coord, coordObj2[el], e_canvas.width)) {
                                     tempKey = el
                                 }
                             });
 
-                            console.log("tempKey", tempKey)
-
-
+                            
+                            
                             if (tempKey) {
+                                console.log("tempKey", tempKey)
                                 delete coordObj2[el]
                                 return;
                             }
                             if(coordObj2.length == 0) {
                                 const makeRand = () => {
                                     coordObj2[generateRandomString(10)] = {
-                                        x_coor: Math.random() * (e_canvas.width - 80), // 640 : canvas width , 20 : rect width
-                                        y_coor: Math.random() * (e_canvas.height - 80),
+                                        x_coor: Math.random() * (e_canvas.width - 120), // 640 : canvas width , 20 : rect width
+                                        y_coor: Math.random() * (e_canvas.height - 120),
+                                        idx : Math.floor((Math.random() * 5) + 1)
                                     }
                                 }
                             }
 
-                            drawSquare(ctx, x_coor, y_coor)
+                            drawImg(ctx, x_coor, y_coor, idx)
                             //스피드에 따라 대충 속도변환
                             // coordObj[el].y_coor = y_coor + speed
 
