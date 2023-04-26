@@ -1,6 +1,7 @@
 <template>
   <div>
-    <vueNavigationBar :options="navigationData" />    
+    <vueNavigationBar :options="navigationData" />
+    <div id="spacer"></div>    
   </div>
 </template>
 
@@ -15,7 +16,7 @@
         elementId: "main-navbar",
           isUsingVueRouter: true,
           mobileBreakpoint: 992,
-          brandImagePath: "./",
+          brandImagePath: {name: 'main'},
           brandImage,
           brandImageAltText: "brand-image",
           showBrandImageInMobilePopup: true,
@@ -26,35 +27,33 @@
             {
               type: "link",
               text: "About",
-              path: "#",
               subMenuOptions: [
                 {
                   isLinkAction: true,
                   type: "link",
                   text: "Project",
-                  path: "#",
+                  path: {name: 'aboutus'},
                 },
                 {
                   type: "link",
                   text: "Team",
-                  path: "#",
+                  path: {name: 'aboutus'},
                 },
                 {
                   type: "link",
                   text: "News",
-                  path: "#"
+                  path: {name: 'aboutus'},
                 },
               ]
             },
             {
               type: "link",
               text: "Service",
-              path: "#",
               subMenuOptions: [
                 {
                   type: "link",
                   text: "YochiYochi",
-                  path: "#",
+                  path: {name: 'service'},
                 },
                 {
                   type: "hr",
@@ -62,41 +61,39 @@
                 {
                   type: "link",
                   text: "Events",
-                  path: "#",
+                  path: {name: 'service'},
                 },
                 {
                   type: "link",
                   text: "Store",
-                  path: "#",
+                  path: {name: 'service'},
                 },
               ]
             },
             {
               type: "link",
               text: "Board",
-              path: "#",
               subMenuOptions: [
                 {
                   type: "link",
                   text: "Community",
-                  path: "#",
+                  path: {name: 'community'},
                 },
                 {
                   type: "link",
                   text: "Resources",
-                  path: "#",
+                  path: {name: 'freeboard'},
                 },
               ]
             },
             {
               type: "link",
               text: "Customer",
-              path: "#",
               subMenuOptions: [
                 {
                   type: "link",
                   text: "Notice",
-                  path: "#",
+                  path: {name: 'customer'},
                 },
                 {
                   type: "hr",
@@ -104,12 +101,12 @@
                 {
                   type: "link",
                   text: "FAQ",
-                  path: "#",
+                  path: {name: 'customer'},
                 },
                 {
                   type: "link",
                   text: "QnA",
-                  path: "#",
+                  path: {name: 'customer'},
                 },
               ]
             },
@@ -119,13 +116,13 @@
               type: "button",
               class: "signup-btn",
               text: "signup",
-              path: "#",
+              path: {name: 'signup'},
             },
             {
               type: "button",
               class: "login-btn",
               text: "login",
-              path: "#",
+              path: {name: 'login'},
             },
           ]
       }
@@ -186,5 +183,10 @@
         }
       }
     }
+  }
+</style>
+<style>
+  #spacer {
+    height: 2rem;
   }
 </style>

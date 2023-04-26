@@ -166,7 +166,7 @@ export default function (store) {
     routes,
   });
   router.beforeEach(async (to, from, next) => {
-    if (to.name === "login" || to.name === "signup" || to.name === "main" || to.name === "community" || to.name === "Qna" || to.name === "freeboard" || to.name === "movenetRain" || to.name === "movenetRand") {
+    if (to.name === "login" || to.name === "signup" || to.name === "main" || to.name === "community" || to.name === "Qna" || to.name === "freeboard" || to.name === "movenetRain" || to.name === "movenetRand" || to.name === "aboutus") {
       return next();
     }
     if (import.meta.env.VITE_IS_LOGIN === "Y") {

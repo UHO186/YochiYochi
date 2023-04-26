@@ -6,6 +6,7 @@ import auth from "./auth/auth";
 import community from "./Community/community";
 import qna from "./Qna/qna";
 import game from "./game/game";
+import itemStore from "./Itemstore/itemstore";
 
 const store = createStore({
     state: {
@@ -48,6 +49,7 @@ const store = createStore({
         community,
         qna,
         game,
+        itemStore,
     },
     plugins: [
         createPersistedState({

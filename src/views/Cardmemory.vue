@@ -179,6 +179,7 @@ export default {
         async getCard() {
             try {
                 const cuslist = await this.$store.dispatch("game/indexImg", this.game_id);
+                console.log(cuslist);
                 this.realcard = cuslist;
 
                 // 게임 이미지를 카드에 적용

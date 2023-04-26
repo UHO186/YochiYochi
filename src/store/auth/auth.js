@@ -42,7 +42,7 @@ export default {
         throw err;
       }
     },
-    async updateUser(userdata) {
+    async updateUser({ commit }, userdata) {
       try {
         const rs = await axios.post(
           "http://localhost/api/updateuser",

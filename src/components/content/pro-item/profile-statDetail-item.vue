@@ -1,6 +1,6 @@
 <template>
-    <div class="font-semibold text-base">
-        <div class="flex justify-between text-2xl mt-5">
+    <div class="font-semibold text-base user-select-none">
+        <div class="flex justify-between text-2xl mt-4">
             <p>학습 내역</p>
             <div class="flex text-xl">
                 <p class="mr-3">정렬</p>
@@ -10,30 +10,34 @@
                 </div>
             </div>
         </div>
-        <div class="border-2 mt-5 flex justify-around py-5">
-            <font-awesome-icon id="left" class="mt-20 cursor-pointer basis-1/12" icon="fa-solid fa-chevron-left" style="height: 40px;" @click="pracRecycle"/><!-- 왼쪽 -->
+        <div class="border-2 mt-3 flex justify-around items-center px-2 py-4">
+            <div id="left" class="cursor-pointer" @click="pracRecycle">
+                <font-awesome-icon class="pointer-events-none" icon="fa-solid fa-chevron-left" style="height: 40px;"/><!-- 왼쪽 -->
+            </div>
             <div class="flex flex-1 justify-center">
-                <div v-for="item,index in practice" :key="index">
-                    <div class="border-2 p-3 mx-2" style="min-width: 152px; max-width:152px;">
-                        <p class="bg-green-500 px-7 py-9 rounded-3xl mb-3">{{item.title}}</p> <!-- 데이터 받아오기 -->
-                        <p>포인트: {{ item.point }}</p>
-                        <p>{{item.count}}회 학습</p>
-                    </div>
+                <div class="border-2 p-3 mx-2 w-[18%] max-w-[138px]" v-for="item,index in practice" :key="index">
+                    <p class="py-9 rounded-3xl mb-3 max-w-[100%]" :style="{ backgroundColor: color[index]}">{{ gameList.find(game => game.id === item.game_id).name }}</p>
+                    <p>포인트: {{ item.score }}</p>
+                    <p>영역: {{category[item.games.category-1]}}</p>
                 </div>
             </div>
-            <font-awesome-icon id="right" class="mt-20 cursor-pointer basis-1/12" icon="fa-solid fa-chevron-right" style="height: 40px;" @click="pracRecycle"/><!-- 오른쪽 -->
+            <div id="right" class="cursor-pointer" @click="pracRecycle">
+                <font-awesome-icon class="pointer-events-none" icon="fa-solid fa-chevron-right" style="height: 40px;"/><!-- 오른쪽 -->
+            </div>
         </div>
-        <div class="flex justify-start text-2xl">
+        <div class="flex justify-start text-2xl mt-4">
             <p>우리 아이 작품</p>
         </div>
-        <div class="border-2 mt-5 py-5 flex justify-around">
-            <font-awesome-icon id="left" icon="fa-solid fa-chevron-left" style="height: 40px;" class="mt-10 cursor-pointer basis-1/12"/>
-            <div v-for="item,index in artwork" :key="index">
-                <div class="border-2 p-3 mx-2" style="min-width: 152px; max-width:152px;">
-                    <img :src="item.img" alt="작품" class="drop-shadow-2xl">
-                </div>
+        <div class="border-2 mt-3 px-2 py-5 flex justify-around items-center">
+            <div id="left" class="cursor-pointer" @click="artRecycle">
+                <font-awesome-icon icon="fa-solid fa-chevron-left" style="height: 40px;" class="pointer-events-none"/>
             </div>
-            <font-awesome-icon id="right" icon="fa-solid fa-chevron-right" style="height: 40px;" class="mt-10 cursor-pointer basis-1/12"/>
+            <div class="border-2 p-3 mx-2 w-[18%] max-w-[138px]" v-for="item,index in artwork" :key="index">
+                <img :src="item.img" alt="작품" class="drop-shadow-2xl">
+            </div>
+            <div id="right" class="cursor-pointer" @click="artRecycle">
+                <font-awesome-icon icon="fa-solid fa-chevron-right" style="height: 40px;" class="pointer-events-none"/>
+            </div>
         </div>
         <div class="flex justify-start">
             <p @click="detail" class="text-xl cursor-pointer bg-black text-white rounded-lg p-2 hover:text-amber-300 mt-5">돌아가기</p>
@@ -47,12 +51,17 @@ export default {
         return {
             pracData: [],
             practice: [],
+            gameList: [],
             pracPage: 0,
             pracThis: 5,
+
             artData: [],
             artwork: [],
             artPage: 0,
             artThis: 5,
+
+            color: ["rgb(243, 81, 82)", "rgb(251, 110, 208)", "rgb(36, 107, 189)", "rgb(9, 181, 128)", "rgb(254, 198, 57)"],
+            category: ["건강", "인간관계", "환경", "언어", "표현"]
         }
     },
     methods: {
@@ -124,18 +133,20 @@ export default {
             }
         },
     },
-    mounted() {
-        for(var i = 1; i < 34; i++ ) {
-            this.pracData.push({title: `practice${i}`, point: i, count: i})
-        }
+    async mounted() {
+        this.pracData = await this.$store.dispatch("game/indexScore") // 유저 게임 스코어
+        this.gameList = await this.$store.dispatch("game/indexGame") // 게임목록
+        
         for(var i = 0; i < 5; i++) {
             if(this.pracData.length > i) {
                 this.practice.push(this.pracData[i])
             }
         }
-        for(var i = 1; i < 6; i++) {
+
+        for(var i = 1; i <= 6; i++) {
             this.artData.push({img: `art/test${i}.jpg`})
         }
+        // console.log(this.artData);
         for(var i = 0; i < 5; i++) {
             if(this.artData.length > i) {
                 this.artwork.push(this.artData[i])

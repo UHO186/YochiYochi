@@ -1,5 +1,5 @@
 <template>
-    <div class="flex justify-around bg-gray-500 font-bold text-4xl py-10">
+    <div class="flex justify-around bg-gray-500 font-bold text-4xl py-10 user-select-none">
         <p id="t1" class="cursor" @click="focusTitle" style="color: rgb(253 186 116)">회원 정보</p>
         <p id="t2" class="cursor" @click="focusTitle">학습 통계</p>
         <p id="t3" class="cursor" @click="focusTitle">구매 내역</p>
