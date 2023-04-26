@@ -147,6 +147,7 @@
     padding-right: 1rem;
     z-index: 100;
     border-bottom: 1px solid rgba(184, 184, 184, 0.514);
+    display: flex;
     .signup-btn {
       background: rgb(0, 101, 232);
       &:hover {

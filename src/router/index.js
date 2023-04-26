@@ -10,12 +10,18 @@ import Freeboard from "../views/Freeboard.vue";
 import Logins from "../views/Logins.vue";
 import Signup from "../views/Signup.vue";
 import Profile from "../views/Profile.vue";
+import Admin from "../views/Admin.vue";
 
 import Draw from "../views/Draw.vue";
 import Cardmemory from "../views/Cardmemory.vue";
 import Picturesort from "../views/Picturesort.vue";
 import Rainscore from "../views/Rainscore.vue";
 import Movenet from "../views/Movenet.vue";
+import Service from "../views/Service.vue";
+import Customer from "../views/Customer.vue";
+import NoticeDetail from "../views/NoticeDetail.vue";
+import QnaDetail from "../views/QnaDetail.vue";
+import ContentList from "../views/ContentList.vue";
 
 import { useCookies } from "vue3-cookies";
 
@@ -26,6 +32,11 @@ const routes = [
     path: "/",
     name: "main",
     component: Main,
+  },
+  {
+    path: "/admin",
+    name: "admin",
+    component: Admin,
   },
   {
     path: "/aboutus",
@@ -47,12 +58,6 @@ const routes = [
     name: "signup",
     component: Signup,
   },
-  {
-    path: "/profile",
-    name: "profile",
-    component: Profile,
-  },
-
   {
     path: "/community",
     name: "community",
@@ -123,6 +128,36 @@ const routes = [
     name: "picturesort",
     component: Picturesort,
   },
+  {
+    path: "/profile",
+    name: "profile",
+    component: Profile,
+  },
+  {
+    path: "/service",
+    name: "service",
+    component: Service,
+  },
+  {
+    path: "/customer",
+    name: "customer",
+    component: Customer,
+  },
+  {
+    path: "/customer/noticeDetail",
+    name: "noticeDetail",
+    component: NoticeDetail,
+  },
+  {
+    path: "/customer/qnaDetail",
+    name: "QnaDetail",
+    component: QnaDetail,
+  },
+  {
+    path: "/content",
+    name: "ContentList",
+    component: ContentList,
+  },
 ];
 
 export default function (store) {
@@ -131,7 +166,7 @@ export default function (store) {
     routes,
   });
   router.beforeEach(async (to, from, next) => {
-    if (to.name === "login" || to.name === "signup" || to.name === "main" || to.name === "movenetRain" || to.name === "movenetRand") {
+    if (to.name === "login" || to.name === "signup" || to.name === "main" || to.name === "community" || to.name === "Qna" || to.name === "freeboard" || to.name === "movenetRain" || to.name === "movenetRand") {
       return next();
     }
     if (import.meta.env.VITE_IS_LOGIN === "Y") {

@@ -5,15 +5,22 @@ export default {
   namespaced: true,
   state: {
     needLogin: true,
+    needAdmin: true
   },
   mutations: {
     needLogin(state, data) {
       state.needLogin = data;
     },
+    needAdmin(state, data) {
+      state.needAdmin = data;
+    }
   },
   getters: {
     needLogin(state) {
       return state.needLogin;
+    },
+    needAdmin(state) {
+      return state.needAdmin;
     },
   },
   actions: {
@@ -27,11 +34,29 @@ export default {
         throw err;
       }
     },
-
+    async user({ commit }) {
+      try{
+        const rs = await axios.get("http://localhost/api/user");
+        return rs.data;
+      } catch {
+        throw err;
+      }
+    },
+    async updateUser(userdata) {
+      try {
+        const rs = await axios.post(
+          "http://localhost/api/updateuser",
+          userdata
+        );
+        return rs.data.msg;
+      } catch (error) {
+        console.error(error);
+      }
+    },
     async login({ commit }, params) {
       try {
         const rs = await axios.post("http://localhost/api/login", params);
-        console.log(rs);
+        console.log('rs', rs.data.user.authority);
         if (rs.data) {
           const access = rs.data.access_token;
           const refresh = rs.data.refresh_token;
@@ -39,10 +64,12 @@ export default {
           cookies.set("accessToken", access, { expires: 1 });
           cookies.set("refreshToken", refresh, { expires: 7 });
           commit("needLogin", false);
+          if (rs.data.user.authority === 'admin') {
+            commit('needAdmin', false)
+          }
         }
         return rs.data.msg;
       } catch (err) {
-        console.error(err);
         throw err;
       }
     },
@@ -51,12 +78,12 @@ export default {
         const rs = await axios.post("http://localhost/api/auth");
 
         if (rs.data.ok) {
-          console.log("verify success");
           return true;
         } else {
           console.error("토큰인증실패");
           alert(rs.data.result);
           commit("needLogin", true);
+          commit("needAdmin", true)
           return false;
         }
       } catch (err) {
@@ -65,6 +92,7 @@ export default {
           // Unauthorized error: JWT token is invalid or expired
           alert("Your session has expired. Please log in again.");
           commit("needLogin", true);
+          commit("needAdmin", true);
         } else if (err.response && err.response.status === 500) {
           // Internal server error
           alert("Internal server error. Please try again later.");
@@ -82,6 +110,7 @@ export default {
         cookies.remove("refreshToken");
         console.log("쿠키삭제완료");
         commit("needLogin", true);
+        commit("needAdmin", true);
         return true;
       } catch (err) {
         console.error(err);

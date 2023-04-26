@@ -41,7 +41,6 @@
             async getMovenet() {
                 // 추가(전체)
                 // 시작 전 위치 확인(안정된 위치에서 시작하게)
-                // 일정 시간 지나도 안 터진 상자 자동으로 터지기
                 // 뜰 때 안 겹치게 하기
                 
                 this.e_canvas = document.getElementById("e_canvas");
@@ -124,7 +123,7 @@
                             // console.log(tempKey)
 
 
-                            if (y_coor > 480 || tempKey) {
+                            if (tempKey || y_coor > e_canvas.height) {
                                 delete coordObj1[el]
                                 return;
                             }
@@ -204,6 +203,7 @@
                             
                             // 추가(랜덤)
                             // 서있는 자세 확인해서 몸에 안 생기게 하기
+                            // 일정 시간 지나도 안 터진 상자 자동으로 터지기
                         })
                         // console.log(movenet.coordArr.length)
 
@@ -230,10 +230,12 @@
 
 <style>
     .container {
-        margin: 2%;
+        margin: auto;
         position: relative;
         width: 100%;
-        height: 100%;        
+        height: 100%;
+        display: flex;
+        justify-content: center;    
     }
     .canvas-wrapper, #output, #video, #e_canvas {
         position: absolute;
@@ -245,4 +247,7 @@
     .canvas-wrapper {
         z-index: 10;
     }
+    /* @media(max-width: ;) {
+        
+    } */
 </style>

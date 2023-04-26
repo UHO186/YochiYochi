@@ -10,8 +10,8 @@ export default {
     async indexScore() {
       // 기록 목록
       try {
-        const response = await axios.get("http://localhost/api/score");
-        return response.data;
+        const rs = await axios.get("http://localhost/api/score");
+        return rs.data;
       } catch (err) {
         console.error(err);
         throw err;

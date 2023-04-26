@@ -32,7 +32,7 @@ export default {
         const animalPictures = [
             {
                 url: "https://placeimg.com/640/480/animals",
-                category: "동물",
+                category: "식물",
             },
             {
                 url: "https://placeimg.com/640/480/animals",

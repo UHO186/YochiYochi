@@ -84,7 +84,7 @@ const draw = (ctx, speed, width, height) => {
             // console.log(tempKey)
 
 
-            if (y_coor > 480 || tempKey) {
+            if (y_coor > e_canvas.height || tempKey) {
                 delete coordObj[el]
                 return;
             }

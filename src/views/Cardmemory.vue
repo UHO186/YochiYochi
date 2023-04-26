@@ -1,8 +1,9 @@
 <template>
     <div>
         <h1>카드 기억 게임</h1>
+        <button v-if="!gameStarted" class="btn btn-outline-secondary mb-3" @click="customUseImg">커스텀 이미지 사용</button>
         <div v-if="!gameStarted">
-            <button @click="startGame">게임 시작</button>
+            <button class="btn btn-outline-primary mb-3" @click="startGame">게임 시작</button>
         </div>
         <div v-else>
             <div>
@@ -31,35 +32,15 @@ export default {
             gameStarted: false,
             timeRemaining: 60,
             totalScore: 0,
+            overGame: false,
             cards: [],
             flippedCards: [],
-            cardValues: [
-                "https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/955571110/B.jpg?675000000",
-                "https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/955571110/B.jpg?675000000",
-                "https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/2791097605/B.jpg?44000000",
-                "https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/2791097605/B.jpg?44000000",
-                "https://item-shopping.c.yimg.jp/i/z/card-museum_rira-jp012-r",
-                "https://item-shopping.c.yimg.jp/i/z/card-museum_rira-jp012-r",
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxiDbwPqERDQncC9XS_uudpyp42h17PnqBwg1rE40-eME-Uhw5CFYH7GtCSJp4hBtTMBI&usqp=CAU",
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxiDbwPqERDQncC9XS_uudpyp42h17PnqBwg1rE40-eME-Uhw5CFYH7GtCSJp4hBtTMBI&usqp=CAU",
-                "http://image.auction.co.kr/itemimage/17/56/ed/1756edf101.jpg",
-                "http://image.auction.co.kr/itemimage/17/56/ed/1756edf101.jpg",
-                "https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/998832134/B.jpg?393000000",
-                "https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/998832134/B.jpg?393000000",
-                "http://image.auction.co.kr/itemimage/96/06/e9/9606e9bb1.jpg",
-                "http://image.auction.co.kr/itemimage/96/06/e9/9606e9bb1.jpg",
-                "https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/2587357186/A2.jpg?52000000",
-                "https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/2587357186/A2.jpg?52000000",
-                "http://image.auction.co.kr/itemimage/72/1a/87/721a87ea6.jpg",
-                "http://image.auction.co.kr/itemimage/72/1a/87/721a87ea6.jpg",
-                "https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/2728786963/A2.jpg?70000000",
-                "https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/2728786963/A2.jpg?70000000",
-                "http://image.auction.co.kr/itemimage/a7/4d/65/a74d65841.jpg",
-                "http://image.auction.co.kr/itemimage/a7/4d/65/a74d65841.jpg",
-                "https://images-na.ssl-images-amazon.com/images/I/51XeqfP-1hL.jpg",
-                "https://images-na.ssl-images-amazon.com/images/I/51XeqfP-1hL.jpg",
-            ],
-            clickable: true
+            cardValues: [],
+            clickable: true,
+            game_id: 1,
+            cuslist: '',
+            realcard: '',
+            selectedFile: null,
         };
     },
     computed: {
@@ -67,8 +48,8 @@ export default {
             return this.shuffleArray(this.cardValues.slice());
         }
     },
-    created() {
-        this.startTimer();
+    mounted() {
+        this.getCard()
     },
     methods: {
         startGame() {
@@ -83,19 +64,23 @@ export default {
                 this.cards.forEach(card => {
                     card.visible = false;
                 });
-                this.clickable = true; // 카드가 뒤집어진 후 클릭 활성화
+                this.clickable = true;
             }, 5000);
-            this.startTimer();
-            this.clickable = false; // 게임이 시작될 때 클릭 비활성화
+            this.startTimer()
+            this.clickable = false;
         },
         startTimer() {
             let startTime = Date.now();
+            let intervalID = setInterval(() => {
+                this.postGameOver();
+            }, 59990);
 
             this.timer = setInterval(() => {
                 const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
                 this.timeRemaining = Math.max(0, 60 - elapsedTime);
                 if (this.timeRemaining === 0) {
                     clearInterval(this.timer);
+                    clearInterval(intervalID); // clear interval here
                     this.gameOver();
                 }
             }, 100);
@@ -122,7 +107,6 @@ export default {
 
             const card = this.cards[index];
 
-            // 이미 뒤집힌 카드인 경우 또는 이미 두 개의 카드가 뒤집혀 있는 경우
             if (card.visible || this.flippedCards.length === 2) {
                 return;
             }
@@ -142,12 +126,13 @@ export default {
             if (card1.value === card2.value) {
                 this.totalScore += 10;
 
-                // 맞춘 카드 쌍의 수를 추적
                 const numMatches = this.cards.filter(card => card.visible).length / 2;
 
-                // 전체 카드 쌍의 수와 같아지면 게임 종료
                 if (numMatches === this.cardValues.length / 2) {
-                    this.gameOver();
+                    this.postGameOver();
+                    let intervalID = setInterval(() => {
+                        this.gameOver();
+                    }, 1000);
                 }
 
                 this.clickable = false;
@@ -164,8 +149,46 @@ export default {
             }
         },
         gameOver() {
-            // alert(`게임 종료! 총 점수: ${this.totalScore}`);
             this.gameStarted = false;
+            this.$router.go(0);
+        },
+        async postGameOver() {
+            try {
+                await this.$store.dispatch("game/storeScore", {
+                    game_id: 1,
+                    score: this.totalScore
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        },
+        async customUseImg() {
+            try {
+                const cuslist = await this.$store.dispatch("game/indexCustomImg", this.game_id);
+                this.cuslist = cuslist;
+
+                // 커스텀 이미지를 카드에 적용
+                for (let i = 0; i < this.cuslist.length; i++) {
+                    this.cardValues[2 * i] = this.cuslist[i].imgpath;
+                    this.cardValues[2 * i + 1] = this.cuslist[i].imgpath;
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        },
+        async getCard() {
+            try {
+                const cuslist = await this.$store.dispatch("game/indexImg", this.game_id);
+                this.realcard = cuslist;
+
+                // 게임 이미지를 카드에 적용
+                for (let i = 0; i < this.realcard.data.length; i++) {
+                    this.cardValues[2 * i] = this.realcard.data[i].imgpath;
+                    this.cardValues[2 * i + 1] = this.realcard.data[i].imgpath;
+                }
+            } catch (err) {
+                console.error(err);
+            }
         }
     }
 }
