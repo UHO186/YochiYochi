@@ -1,3 +1,25 @@
+Skip to content
+Sign up
+S0YUN1QUE
+/
+YochiYochi
+Public
+Code
+Issues
+Pull requests
+Actions
+Projects
+Security
+Insights
+YochiYochi/src/views/Rainscore.vue
+
+jit test.py
+Latest commit c548049 2 weeks ago
+ History
+ 1 contributor
+316 lines (286 sloc)  11.1 KB
+ 
+
 <template>
     <div>
         <canvas class="rounded-4 border border-success p-2 mb-2 border-opacity-75" ref="canvas"></canvas>
@@ -18,7 +40,6 @@
 <script>
 import { toHandlers } from 'vue';
 import { useRouter } from 'vue-router';
-
 export default {
     data() {
         return {
@@ -48,32 +69,23 @@ export default {
     },
     mounted() {
         this.getWord()
-
         const canvas = this.$refs.canvas;
         const ctx = canvas.getContext('2d');
-
         this.width = canvas.width = 800;
         this.height = canvas.height = 600;
-
         this.isFinished = false
-
         this.recognitionSupported = 'webkitSpeechRecognition' in window;
-
         // targetsX 배열을 초기화합니다.
         this.targetsX = Array.from({ length: this.targets.length }, () => Math.random() * (this.width - this.targetsWidth));
-
         this.targetsInterval = setInterval(() => {
             this.targetsX = Array.from({ length: this.targets.length }, () => Math.random() * (this.width - this.targetsWidth));
             this.targetsY = -100;
         }, 10000 / this.targetsPerSecond);
-
         const router = useRouter();
         this.router = router
-
         setInterval(() => {
             this.moveTargets();
         }, 1000000 / this.targetsPerSecond);
-
         if (this.recognitionSupported) {
             console.log('음성인식');
             this.recognition = new webkitSpeechRecognition();
@@ -81,11 +93,9 @@ export default {
             this.recognition.continuous = true;
             this.recognition.interimResults = true;
             this.recognition.onresult = null;
-
             this.recognition.onresult = event => {
                 const result = event.results[event.results.length - 1];
                 const word = result[0].transcript.trim();
-
                 if (result.isFinal) {
                     this.typed = word;
                 } else {
@@ -94,14 +104,12 @@ export default {
                     return; // 이 부분을 추가하여 더 이상 함수를 진행하지 않도록 합니다.
                 }
             };
-
             this.recognition.onerror = error => {
                 console.error(error);
             };
         } else {
             console.warn('Speech recognition is not supported in this browser.');
         }
-
         const loop = () => {
             if (this.isGameOver) {
                 this.drawGameOver(ctx);
@@ -111,13 +119,11 @@ export default {
                 this.drawGameOver(ctx);
                 return this.postGameOver();
             }
-
             ctx.clearRect(0, 0, this.width, this.height);
             this.moveTargets();
             this.drawTargets(ctx);
             this.checkCollisions();
             this.drawScore(ctx);
-
             if (this.isStarted) {
                 requestAnimationFrame(loop);
             }
@@ -132,20 +138,16 @@ export default {
         shuffle(array) {
             let currentIndex = array.length;
             let temporaryValue, randomIndex;
-
             // While there remain elements to shuffle...
             while (0 !== currentIndex) {
-
                 // Pick a remaining element...
                 randomIndex = Math.floor(Math.random() * currentIndex);
                 currentIndex -= 1;
-
                 // And swap it with the current element.
                 temporaryValue = array[currentIndex];
                 array[currentIndex] = array[randomIndex];
                 array[randomIndex] = temporaryValue;
             }
-
             return array;
         },
         startGame() {
@@ -172,7 +174,6 @@ export default {
             }
             // targetsX 배열을 초기화합니다.
             this.targetsX = Array.from({ length: this.targets.length }, () => Math.random() * (this.width - this.targetsWidth));
-
             requestAnimationFrame(this.loop);
         },
         restartGame() {
@@ -220,16 +221,13 @@ export default {
                 this.targetsPerSecond += 0.1;
                 this.speed += 0.1;
                 this.targetsY = -100;
-
                 // 해당 원소를 배열에서 제거하고
                 const targetIndex = this.targets.indexOf(target);
                 this.targets.splice(targetIndex, 1);
-
                 // 그 자리를 비웁니다.
                 this.targets.splice(targetIndex, 0, '');
                 this.targetsX.splice(targetIndex, 0, 0);
             }
-
             if (this.targets.length === 0) {
                 // 게임이 끝난 경우
                 // this.ctx.clearRect(0, 0, this.width, this.height);
@@ -237,7 +235,6 @@ export default {
                 return;
             }
         },
-
         startFont(ctx) {
             ctx.font = "60px sans-serif";
             ctx.fillStyle = "red";
@@ -272,10 +269,8 @@ export default {
         completePage() {
             // 이미 최종 점수가 전송된 경우 함수를 빠져나옵니다.
             if (this.isScorePosted) return;
-
             // 최종 점수를 서버에 전송합니다.
             this.postGameOver();
-
             // isScorePosted 변수를 true로 설정합니다.
             this.isScorePosted = true;
         },
@@ -308,9 +303,23 @@ canvas {
     display: block;
     margin: 0 auto;
 }
-
 .rains-container {
     width: 20em;
     text-align: center;
 }
 </style>
+Footer
+© 2023 GitHub, Inc.
+Footer navigation
+Terms
+Privacy
+Security
+Status
+Docs
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About
+YochiYochi/Rainscore.vue at new · S0YUN1QUE/YochiYochi · GitHub
